@@ -1,0 +1,51 @@
+version: '3.5'
+
+services:
+
+    edx_mysql:
+        image: mysql:5.6
+        ports:
+          - "3316:3306"
+        env_file: env.d/edx
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    
+    edx_mongodb:
+        image: mongo:3.2
+        # We use WiredTiger in all environments. In development environments we use small files
+        # to conserve disk space, and disable the journal for a minor performance gain.
+        # See https://docs.mongodb.com/v3.0/reference/program/mongod/#options for complete details.
+        command: mongod --smallfiles --nojournal --storageEngine wiredTiger
+    
+    edx_redis:
+        image: redis:4.0.10-alpine
+    
+    edx_mailcatcher:
+        image: sj26/mailcatcher:latest
+        ports:
+            - "1080:1080"
+
+    edx_lms:
+        image: ${EDXAPP_IMAGE:-fundocker/edxapp:dogwood.3-fun-2.1.1}
+        env_file:
+            - env.d/edx
+        environment:
+            SERVICE_VARIANT: lms
+            DJANGO_SETTINGS_MODULE: lms.envs.fun.docker_run
+        ports:
+            - "8072:8000"
+        volumes:
+            - ./releases/dogwood/3/fun/data/media:/edx/var/edxapp/media
+            - ./releases/dogwood/3/fun/config:/config
+        command: >
+            python manage.py lms runserver 0.0.0.0:8000
+        depends_on:
+            - graylog
+            - edx_mailcatcher
+            - edx_mysql
+            - edx_mongodb
+            - edx_redis
+        networks:
+            - default    
+
+    dockerize:
+        image: jwilder/dockerize
