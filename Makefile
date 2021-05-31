@@ -1,4 +1,4 @@
-EDXAPP_IMAGE="fundocker/edxapp:dogwood.3-fun-2.1.1"
+EDXAPP_IMAGE="fundocker/edxapp:dogwood.3-fun-2.0.0"
 
 # Get local user ids
 DOCKER_UID              = $(shell id -u)
@@ -8,8 +8,8 @@ DOCKER_GID              = $(shell id -g)
 COMPOSE          = \
   DOCKER_UID=$(DOCKER_UID) \
   DOCKER_GID=$(DOCKER_GID) \
-  EDXAPP_IMAGE="$(EDXAPP_IMAGE)" \
-  docker-compose -f docker-compose.edx.yml -f docker-compose.yml
+  EDXAPP_IMAGE=$(EDXAPP_IMAGE) \
+  docker-compose -f docker-compose.edx.yml -f docker-compose.cypress.yml -f docker-compose.yml
 COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
 
@@ -70,6 +70,10 @@ run:  ## start the service
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
 .PHONY: run
 
+status: ## alias for "docker-compose ps"
+	$(COMPOSE) ps
+.PHONY: status
+
 stop:  ## stop the development servers
 	$(COMPOSE) stop
 .PHONY: stop
@@ -79,6 +83,10 @@ down:  ## stop and remove docker containers
 	@echo -n "Are you sure to proceed? [y/N] " && read ans && [ $${ans:-N} = y ]
 	$(COMPOSE) down
 .PHONY: down
+
+test: ## run tests
+	$(COMPOSE_RUN) cypress run --config-file false
+.PHONY: test
 
 tree: \
 	data/edx/media/.keep \

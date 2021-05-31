@@ -1,0 +1,9 @@
+version: "3.5"
+services:
+  cypress:
+    image: "cypress/included:4.0.2"
+    entrypoint: cypress
+    working_dir: /e2e
+    user: ${DOCKER_UID}:${DOCKER_GID}
+    volumes:
+      - ./e2e:/e2e

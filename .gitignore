@@ -10,3 +10,7 @@ data/
 
 # Sources
 src/
+
+# End-to-end testing
+e2e/cypress/*
+!e2e/cypress/integration
