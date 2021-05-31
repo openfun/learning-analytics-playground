@@ -29,7 +29,7 @@ services:
       - "1080:1080"
 
   edx_lms:
-    image: ${EDXAPP_IMAGE:-fundocker/edxapp:dogwood.3-fun-2.1.1}
+    image: ${EDXAPP_IMAGE:-fundocker/edxapp:dogwood.3-fun-2.0.0}
     env_file:
       - env.d/edx
     environment:
@@ -55,7 +55,7 @@ services:
       - default
 
   edx_cms:
-    image: ${EDXAPP_IMAGE:-fundocker/edxapp:dogwood.3-fun-2.1.1}
+    image: ${EDXAPP_IMAGE:-fundocker/edxapp:dogwood.3-fun-2.0.0}
     env_file:
       - env.d/edx
     environment:
