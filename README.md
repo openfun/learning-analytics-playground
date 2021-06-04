@@ -35,12 +35,20 @@ make run
 
 2. When connections are established, you can access:
 
-    * the LMS server on [localhost:8072](http://localhost:8072)
+    * the LMS server on [localhost:8072/login](http://localhost:8072/login)
+    * the CMS server on [localhost:8082/signin](http://localhost:8072/signin)
     * the Graylog server on [localhost:9000](http://localhost:9000)
+
+
+3. Two users are available for testing the LMS/CMS:
+
+    * admin: `admin@example.com`:`admin`
+    * student: `edx@example.com`:`edx`
+
 
 ### Configure an input on Graylog interface
 
-1. Access Graylog interface with `admin` / `admin` credentials.
+1. Access Graylog interface with `admin`:`admin` credentials.
 
 2. To configure the input where to listen the LMS server, click on `System` bar menu and `Inputs`
 button.

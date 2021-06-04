@@ -27,11 +27,14 @@ data/edx/media/.keep:
 	mkdir -p data/edx/media
 	touch data/edx/media/.keep
 
+data/edx/store/.keep:
+	mkdir -p data/edx/store
+	touch data/edx/store/.keep
+
 # Make commands
 
 clean:  ## remove temporary data
-	rm -r \
-	  data/* || exit 0
+	rm -rf data/* || exit 0
 .PHONY: clean
 
 clean-db: \
@@ -44,11 +47,15 @@ logs:  ## get development logs
 	$(COMPOSE) logs -f
 .PHONY: logs
 
+migrate: \
+  tree
 migrate:  ## perform database migrations
 	@echo "Booting mysql service..."
 	$(COMPOSE) up -d edx_mysql
 	$(WAIT_DB)
 	$(COMPOSE_RUN) edx_lms python manage.py lms migrate
+	$(COMPOSE_RUN) edx_lms python /usr/local/bin/auth_init
+	$(COMPOSE_RUN) edx_cms python manage.py cms migrate
 .PHONY: migrate
 
 run: \
@@ -60,14 +67,22 @@ run:  ## start the service
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
 .PHONY: run
 
 stop:  ## stop the development servers
 	$(COMPOSE) stop
 .PHONY: stop
 
+down:  ## stop and remove docker containers
+	@echo "This will remove the containers and networks related to this project."
+	@echo -n "Are you sure to proceed? [y/N] " && read ans && [ $${ans:-N} = y ]
+	$(COMPOSE) down
+.PHONY: down
+
 tree: \
-	data/edx/media/.keep
+	data/edx/media/.keep \
+	data/edx/store/.keep
 tree:  ## create data directories mounted as volumes
 .PHONY: tree
 

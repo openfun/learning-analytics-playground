@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+
+from os import environ
+
+import django
+
+django.setup()
+
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.core.exceptions import ImproperlyConfigured
+
+from student.models import UserProfile
+
+
+# Create a normal user
+try:
+    edx = User.objects.get(username="edx")
+except User.DoesNotExist:
+    edx = User.objects.create(username="edx", email="edx@example.com", is_active=True)
+    edx.set_password("edx")
+    edx.save()
+    UserProfile.objects.create(user=edx)
+
+# Create a superuser
+try:
+    admin = User.objects.get(username="admin")
+except User.DoesNotExist:
+    admin = User.objects.create(
+        username="admin",
+        email="admin@example.com",
+        is_active=True,
+        is_superuser=True,
+        is_staff=True,
+    )
+    admin.set_password("admin")
+    admin.save()
+    UserProfile.objects.create(user=admin)
+
+
+# Activate API access
+try:
+    from openedx.core.djangoapps.api_admin.models import (
+        ApiAccessConfig,
+        ApiAccessRequest,
+    )
+except ImportError:
+    pass
+else:
+    api_access = ApiAccessConfig.objects.last()
+    if api_access is None:
+        ApiAccessConfig.objects.create(enabled=True)
+    elif api_access.enabled is False:
+        api_access.enabled = True
+        api_access.save()
+
+# Create SSO authorizations
+try:
+    from oauth2_provider.models import Application
+
+except ImportError:
+    # Open edX version <= Dogwood
+    from oauth2_provider.models import TrustedClient
+    from provider.oauth2.models import Client
+    from provider.constants import CONFIDENTIAL
+
+    client = {
+        "client_type": CONFIDENTIAL,
+        "client_secret": "fakesecret",
+        "name": "Test SSO",
+        "redirect_uri": "http://localhost:8070/oauth/complete/edx-oidc/",
+        "url": "localhost:8070",
+        "user": admin,
+    }
+
+    # Create Client with authorization for SSO connection
+    try:
+        sso_client = Client.objects.get(client_id="social-id")
+    except Client.DoesNotExist:
+        sso_client = Client.objects.create(client_id="social-id", **client)
+    else:
+        Client.objects.filter(id=sso_client.id).update(**client)
+
+    TrustedClient.objects.get_or_create(client=sso_client)
+
+else:
+    # Open edX version >= Eucalyptus
+    client = {
+        "authorization_grant_type": "authorization-code",
+        "client_type": Application.CLIENT_CONFIDENTIAL,
+        "client_secret": "fakesecret",
+        "name": "Test SSO",
+        "redirect_uris": "http://localhost:8070/oauth/complete/edx-oauth2/",
+        "skip_authorization": True,
+        "user": admin,
+    }
+
+    # Create Application with authorization code for SSO connection
+    try:
+        sso_authorization = Application.objects.get(client_id="social-id")
+    except Application.DoesNotExist:
+        Application.objects.create(client_id="social-id", **client)
+    else:
+        Application.objects.filter(id=sso_authorization.id).update(**client)
