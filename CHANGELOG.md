@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Add edx cms service
 - Add graylog service
-- Add edx service
+- Add edx lms service
 
 [Unreleased]: https://github.com/openfun/learning-analytics-playground/commits/main
