@@ -1,0 +1,132 @@
+version: 2
+
+aliases:
+  - &main-filters
+    filters:
+      branches:
+        ignore: main
+
+docker-login: &docker-login
+  # Login to DockerHub
+  #
+  # Nota bene: you'll need to define the following secrets environment vars
+  # in CircleCI interface:
+  #
+  #   - DOCKER_HUB_USER
+  #   - DOCKER_HUB_PASSWORD
+  run:
+    name: Login to DockerHub
+    command: >
+      test -n "$DOCKER_HUB_USER" &&
+        echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USER" --password-stdin ||
+        echo "Docker Hub anonymous mode"
+
+jobs:
+  # Check that the git history is clean and complies with our expectations
+  lint-git:
+    docker:
+      - image: circleci/python:3.9-buster
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    working_directory: ~/learning-analytics-playground
+    steps:
+      - checkout
+      - run:
+          name: Check absence of fixup commits
+          command: |
+            ! git log | grep 'fixup!'
+      - run:
+          name: Install gitlint
+          command: |
+            pip install --user gitlint
+      - run:
+          name: Lint commit messages added to main
+          command: |
+            ~/.local/bin/gitlint --commits origin/main..HEAD
+
+  # Check that the CHANGELOG has been updated in the current branch
+  check-changelog:
+    docker:
+      - image: circleci/buildpack-deps:buster-scm
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    working_directory: ~/learning-analytics-playground
+    steps:
+      - checkout
+      - run:
+          name: Check that the CHANGELOG has been modified in the current branch
+          command: |
+            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
+  # Check that the CHANGELOG max line length does not exceed 80 characters
+  lint-changelog:
+    docker:
+      - image: debian:buster-slim
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    working_directory: ~/learning-analytics-playground
+    steps:
+      - checkout
+      - run:
+          name: Check CHANGELOG max line length
+          command: |
+            # Get the longuest line width (ignoring release links)
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
+
+  test-e2e:
+    machine: true
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Create external potsie network
+          command: docker network create potsie
+      - run:
+          name: Bootstrap project
+          command: make bootstrap
+      - run:
+          name: Run e2e tests
+          command: make test
+
+  lint-test:
+    docker:
+      - image: circleci/node:14
+        auth:
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
+    working_directory: ~/learning-analytics-playground/
+    steps:
+      - checkout:
+          path: ~/learning-analytics-playground
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "yarn.lock" }}
+      # If the yarn.lock file is not up-to-date with the package.json file,
+      # using the --frozen-lockfile should fail.
+      - run:
+          name: Install dependencies for e2e tests
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Lint JS code with eslint
+          command: yarn lint
+      - run:
+          name: Lint JS tests files
+          command: yarn prettier --list-different '**/*.+(js)'
+
+workflows:
+  version: 2
+  playground:
+    jobs:
+      - lint-git
+      - check-changelog:
+          <<: *main-filters
+      - lint-changelog:
+          <<: *main-filters
+      - lint-test
+      - test-e2e:
+          <<: *main-filters
+          requires:
+            - lint-test

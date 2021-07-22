@@ -1,9 +1,16 @@
-version: "3.5"
+version: "3.2"
 services:
   cypress:
-    image: "cypress/included:4.0.2"
+    image: "cypress/included:8.3.0"
     entrypoint: cypress
     working_dir: /e2e
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
       - ./e2e:/e2e
+
+  node:
+    image: circleci/node:14
+    working_dir: /app
+    user: ${DOCKER_UID}:${DOCKER_GID}
+    volumes:
+      - .:/app
