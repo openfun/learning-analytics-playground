@@ -14,3 +14,9 @@ src/
 # End-to-end testing
 e2e/cypress/*
 !e2e/cypress/integration
+
+# JS dependencies
+node_modules
+
+# logs
+yarn-error.log

@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3.2"
 
 services:
   edx_mysql:
@@ -80,5 +80,4 @@ services:
 
 networks:
   potsie:
-    name: potsie
     external: true

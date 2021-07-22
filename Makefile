@@ -13,6 +13,16 @@ COMPOSE          = \
 COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
 
+
+# -- Node
+# We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
+# ID of our host user (with which we run the container) does not exist in the
+# container (e.g. 1000 exists but 1009 does not exist by default), then yarn
+# will try to write to "/.yarnrc" at the root of the system and will fail with a
+# permission error.
+COMPOSE_RUN_NODE     = $(COMPOSE_RUN) node
+YARN                 = $(COMPOSE_RUN_NODE) yarn
+
 # Terminal colors
 COLOR_DEFAULT = \033[0;39m
 COLOR_ERROR   = \033[0;31m
@@ -48,6 +58,25 @@ clean-db: \
 clean-db:  ## remove LMS databases
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis 
 .PHONY: clean-db
+
+install: ## install tests dependencies
+	$(YARN) install
+.PHONY: install
+
+lint-test: ## run tests "linters"
+lint-test: \
+  install\
+  lint-test-eslint \
+  lint-test-prettier
+.PHONY: lint-test
+
+lint-test-eslint: ## lint js sources
+	$(YARN) lint --fix
+.PHONY: lint-test-eslint
+
+lint-test-prettier: ## run prettier over js files
+	$(YARN) prettier-write
+.PHONY: lint-test-prettier
 
 logs:  ## get development logs
 	$(COMPOSE) logs -f
