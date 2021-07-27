@@ -33,6 +33,12 @@ data/edx/store/.keep:
 
 # Make commands
 
+bootstrap: ## bootstrap the project
+bootstrap: \
+	migrate \
+	run
+.PHONY: bootstrap
+
 clean:  ## remove temporary data
 	rm -rf data/* || exit 0
 .PHONY: clean
