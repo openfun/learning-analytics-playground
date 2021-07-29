@@ -29,7 +29,7 @@ describe('Create user account', function() {
       cy.get('nav#top-menu a.signup-link.header-block > span').click();
 
       // fill in sign up form
-      cy.url().should('include', 'http://localhost:8072/register')
+      cy.url().should('include', 'http://edx_lms:8000/register')
       cy.get('input#email').type(state.email);
       cy.get('input#name').type(state.name);
       cy.get('input#username').type(state.username);

@@ -9,3 +9,5 @@ DOCKER_UID=${DOCKER_UID} \
   -f docker-compose.cypress.yml \
   run \
   --rm cypress "${@}"
+
+# bin/cypress run -b chrome --config-file false
