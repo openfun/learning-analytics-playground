@@ -8,9 +8,13 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
 - Add CI configuration
 - Add edx cms service
 - Add graylog service
 - Add edx lms service
+- Add keycloak service
+
 
 [Unreleased]: https://github.com/openfun/learning-analytics-playground/commits/main

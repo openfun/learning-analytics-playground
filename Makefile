@@ -9,7 +9,11 @@ COMPOSE          = \
   DOCKER_UID=$(DOCKER_UID) \
   DOCKER_GID=$(DOCKER_GID) \
   EDXAPP_IMAGE=$(EDXAPP_IMAGE) \
-  docker-compose -f docker-compose.edx.yml -f docker-compose.cypress.yml -f docker-compose.yml
+  docker-compose \
+    -f docker-compose.cypress.yml \
+    -f docker-compose.edx.yml \
+    -f docker-compose.keycloak.yml \
+    -f docker-compose.yml
 COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
 
@@ -31,6 +35,8 @@ COLOR_RESET   = \033[0m
 COLOR_SUCCESS = \033[0;32m
 COLOR_WARNING = \033[0;33m
 
+default: help
+
 # Target release expected tree
 
 data/edx/media/.keep:
@@ -46,7 +52,8 @@ data/edx/store/.keep:
 bootstrap: ## bootstrap the project
 bootstrap: \
 	migrate \
-	run
+	run \
+	realm
 .PHONY: bootstrap
 
 clean:  ## remove temporary data
@@ -56,7 +63,7 @@ clean:  ## remove temporary data
 clean-db: \
   stop
 clean-db:  ## remove LMS databases
-	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis 
+	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
 .PHONY: clean-db
 
 install: ## install tests dependencies
@@ -103,9 +110,16 @@ run:  ## start the service
 	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
 .PHONY: run
 
-status: ## alias for "docker-compose ps"
+realm:  ## import configured keycloak realm
+	$(COMPOSE) exec \
+		keycloak \
+			/opt/jboss/keycloak/local/bin/realm
+.PHONY: realm
+
+status:  ## alias for "docker-compose ps"
 	$(COMPOSE) ps
 .PHONY: status
 
