@@ -1,0 +1,31 @@
+{
+      "clientId": "potsie",
+      "name": "Potsie",
+      "description": "Grafana-based learning analytics dashboards",
+      "enabled": true,
+      "rootUrl": "http://localhost:3000",
+      "adminUrl": "http://localhost:3000",
+      "baseUrl": "/login/generic_oauth",
+      "clientAuthenticatorType": "client-secret",
+      "secret": "fa9e98ee-61a1-4092-8dac-1597da0c1bb0",
+      "redirectUris": ["http://localhost:3000/login/generic_oauth"],
+      "webOrigins": ["http://localhost:3000/login"],
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "fullScopeAllowed": false,
+      "protocol": "openid-connect",
+      "protocolMappers": [
+        {
+          "name": "Roles",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-client-role-mapper",
+          "config": {
+            "claim.name": "roles",
+            "jsonType.label": "String",
+            "usermodel.clientRoleMapping.clientId": "potsie",
+            "access.token.claim": "true",
+            "multivalued": "true"
+          }
+        }
+      ]
+}

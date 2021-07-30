@@ -77,6 +77,18 @@ Generated events with end-to-end tests or with manual navigation on the LMS serv
 
 3. You should see appearing a list of all the messages you have generated!
 
+## Keycloak
+
+The keycloak SSO service is pre-configured for the `fun-mooc` realm. Once
+started with the project's `make run`, it can be accessed at
+[http://localhost:8080](http://localhost:8080). Administrator credentials are:
+`admin:pass`.
+
+For now only the `potsie` client has been configured to login to grafana (see
+the [openfun/potsie](https://github.com/openfun/potsie) project) using a
+Keycloak account (it should have been created by the `make bootstrap` command).
+You can login to grafana using the following credentials: `grafana:funfunfun`.
+
 ## License
 
 This work is released under the MIT license (see [LICENSE](./LICENSE)).

@@ -1,0 +1,28 @@
+version: "3.2"
+services:
+
+  keycloak:
+    image: "quay.io/keycloak/keycloak:14.0.0"
+    env_file: env.d/keycloak
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./bin:/opt/jboss/keycloak/local/bin
+      - ./data/keycloak/:/tmp/config
+    depends_on:
+      - keycloak_postgres
+    networks:
+      potsie:
+        aliases:
+          - keycloak
+      default:
+
+  keycloak_postgres:
+    image: postgres:13.3
+    env_file: env.d/keycloak
+    networks:
+      default:
+
+networks:
+  potsie:
+    external: true

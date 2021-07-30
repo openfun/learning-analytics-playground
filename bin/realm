@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+export PATH="/opt/jboss/keycloak/bin/:${PATH}"
+
+declare realm="${DEFAULT_REALM_NAME}"
+declare user="${TEST_USER_NAME}"
+declare password="${TEST_USER_PASSWORD}"
+declare email="${TEST_USER_EMAIL}"
+declare client_id="${GRAFANA_CLIENT_ID}"
+declare client_uuid
+declare client_secret="${GRAFANA_CLIENT_SECRET}"
+
+# Server login
+kcadm.sh config credentials \
+  --server http://localhost:8080/auth \
+  --realm master \
+  --user "${KEYCLOAK_USER}" \
+  --password "${KEYCLOAK_PASSWORD}"
+
+# Delete the realm if it already exists
+if kcadm.sh get "realms/${realm}"; then
+  kcadm.sh delete "realms/${realm}"
+fi
+
+# And (re-)create it
+kcadm.sh create realms -s realm="${realm}" -s enabled=true
+
+# Create a client along with its roles
+kcadm.sh create clients -r "${realm}" -f - < /tmp/config/clients/potsie.json
+client_uuid=$(kcadm.sh get clients -r fun-mooc --fields id -q clientId=potsie --format csv | sed 's/"//g')
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=admin
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=editor
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=viewer
+
+# Create a new user
+kcadm.sh create users -r "${realm}" -s username="${user}" -s email="${email}" -s enabled=true
+kcadm.sh set-password -r "${realm}" --username "${user}" --new-password "${password}"
