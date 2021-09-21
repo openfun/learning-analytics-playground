@@ -1,0 +1,23 @@
+# MariaDB
+
+ALLOW_EMPTY_PASSWORD=yes
+
+MARIADB_DATABASE=moodle_mariadb_db
+MARIADB_USER=moodle_mariadb_user
+MARIADB_PASSWORD=moodle_mariadb_pwd
+
+# Apache 
+
+APACHE_ENABLE_CUSTOM_PORTS=yes
+APACHE_HTTP_PORT_NUMBER=8181
+
+# Moodle
+
+MOODLE_DATABASE_NAME=moodle_mariadb_db
+MOODLE_DATABASE_USER=moodle_mariadb_user
+MOODLE_DATABASE_PASSWORD=moodle_mariadb_pwd
+
+MOODLE_USERNAME=admin
+MOODLE_PASSWORD=password
+
+MOODLE_SITE_NAME=Moodle
