@@ -102,15 +102,22 @@ migrate:  ## perform database migrations
 
 run: \
   tree
-run:  ## start the service
-	$(COMPOSE) up -d
+run:  ## start base services
+	$(COMPOSE) up -d graylog keycloak
+	@echo "Wait for service to be up..."
+	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
+.PHONY: run
+
+run-edx: \
+  tree
+run-edx:  ## start edx services
+	$(COMPOSE) up -d edx_cms
 	@echo "Wait for service to be up..."
 	$(WAIT_DB)
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
-	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
-	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
 .PHONY: run
 
 realm:  ## import configured keycloak realm
