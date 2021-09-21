@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  mariadb:
+    image: bitnami/mariadb:latest
+    env_file: env.d/moodle
+    user: ${DOCKER_UID}:${DOCKER_GID}
+    volumes:
+      - ./data/moodle/mariadb:/bitnami/mariadb
+    networks:
+      - default
+
+  moodle:
+    image: bitnami/moodle:latest
+    env_file: env.d/moodle
+    ports:
+      - "8181:8181"
+      - "8443:8443"
+    user: ${DOCKER_UID}:${DOCKER_GID}
+    volumes:
+      - ./data/moodle/app:/bitnami/moodle
+    networks:
+      - default
+    depends_on:
+      - mariadb
+
+  dockerize:
+    image: jwilder/dockerize

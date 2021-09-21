@@ -13,6 +13,7 @@ COMPOSE          = \
     -f docker-compose.cypress.yml \
     -f docker-compose.edx.yml \
     -f docker-compose.keycloak.yml \
+	-f docker-compose.moodle.yml \
     -f docker-compose.yml
 COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
@@ -62,8 +63,8 @@ clean:  ## remove temporary data
 
 clean-db: \
   stop
-clean-db:  ## remove LMS databases
-	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
+clean-db:  ## remove databases
+	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres mariadb
 .PHONY: clean-db
 
 install: ## install tests dependencies
@@ -111,6 +112,7 @@ run:  ## start the service
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://moodle:8181 -timeout 60s
 .PHONY: run
 
 realm:  ## import configured keycloak realm
