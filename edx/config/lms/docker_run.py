@@ -1441,7 +1441,6 @@ TEMPLATES = [DEFAULT_TEMPLATE_ENGINE]
 FUN_DEFAULT_VIDEO_PLAYER = "libcast_xblock"
 
 MIDDLEWARE_CLASSES += (
-    "fun.middleware.LegalAcceptance",
     "backoffice.middleware.PathLimitedMasqueradeMiddleware",
 )
 

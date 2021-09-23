@@ -2,17 +2,8 @@
 
 describe("LMS Login Test", () => {
   it("should fill login form and redirect to dashboard", { retries: 5 }, () => {
-    cy.visit("http://edx_lms:8000/login");
-
-    // enter credentials
-    cy.get("input#email").type("edx@example.com");
-    cy.get("div:nth-child(4) > input[name=password]").type("edx");
-
     // submit login form
-    cy.get("form > button#submit").click();
-
-    // redirect to dashboard page
-    cy.url().should("include", "/dashboard");
+    cy.lmsLogin("edx@example.com", "edx");
 
     // disconnect and return to home page
     cy.get(

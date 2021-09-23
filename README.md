@@ -13,6 +13,7 @@ feed dashboard development testing datasets. It is intended to be used locally.
 
 ```
 make bootstrap
+make run-edx
 ```
 
 > Note: as the command includes migrations, it may take some time to complete (several minutes).

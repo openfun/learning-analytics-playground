@@ -47,17 +47,22 @@ data/edx/store/.keep:
 	mkdir -p data/edx/store
 	touch data/edx/store/.keep
 
+data/edx/edx-demo-course/course.xml:
+	mkdir -p data/edx/edx-demo-course/
+	tar xzf data/edx/course.U56d1i.tar.gz -C data/edx/edx-demo-course/ --strip-components=1
+
 # Make commands
 
 bootstrap: ## bootstrap the project
 bootstrap: \
 	migrate \
+	edx-demo-course \
 	run \
 	realm
 .PHONY: bootstrap
 
 clean:  ## remove temporary data
-	rm -rf data/* || exit 0
+	rm -rf data/edx/media data/edx/store data/edx/edx-demo-course || exit 0
 .PHONY: clean
 
 clean-db: \
@@ -65,6 +70,13 @@ clean-db: \
 clean-db:  ## remove LMS databases
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
 .PHONY: clean-db
+
+edx-demo-course: \
+  data/edx/edx-demo-course/course.xml
+edx-demo-course:  ## Import demo course from edX repository
+	$(COMPOSE_RUN) -v $(PWD)/data/edx/edx-demo-course:/edx/app/edxapp/edx-demo-course edx_cms \
+		python manage.py cms import /edx/var/edxapp/data /edx/app/edxapp/edx-demo-course
+.PHONY: edx-demo-course
 
 install: ## install tests dependencies
 	$(YARN) install
@@ -118,7 +130,7 @@ run-edx:  ## start edx services
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
-.PHONY: run
+.PHONY: run-edx
 
 realm:  ## import configured keycloak realm
 	$(COMPOSE) exec \
