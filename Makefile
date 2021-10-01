@@ -19,7 +19,7 @@ COMPOSE          = \
     -f docker-compose.yml
 COMPOSE_RUN      	 = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_EDX_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
-WAIT_MOODLE_DB		 = $(COMPOSE_RUN) dockerize -wait tcp://moodle_postgre:5432 -timeout 60s # FIXME
+WAIT_MOODLE_DB		 = $(COMPOSE_RUN) dockerize -wait tcp://moodle_postgre:5432 -timeout 60s
 
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
