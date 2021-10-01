@@ -1,4 +1,5 @@
 EDXAPP_IMAGE="fundocker/edxapp:dogwood.3-fun-2.0.0"
+MOODLE_IMAGE="moodlehq/moodle-php-apache:8.0"
 
 # Get local user ids
 DOCKER_UID              = $(shell id -u)
@@ -9,15 +10,16 @@ COMPOSE          = \
   DOCKER_UID=$(DOCKER_UID) \
   DOCKER_GID=$(DOCKER_GID) \
   EDXAPP_IMAGE=$(EDXAPP_IMAGE) \
+  MOODLE_IMAGE=$(MOODLE_IMAGE) \
   docker-compose \
     -f docker-compose.cypress.yml \
     -f docker-compose.edx.yml \
     -f docker-compose.keycloak.yml \
 	-f docker-compose.moodle.yml \
     -f docker-compose.yml
-COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
-WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
-
+COMPOSE_RUN      	 = $(COMPOSE) run --rm -e HOME="/tmp"
+WAIT_EDX_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
+WAIT_MOODLE_DB		 = $(COMPOSE_RUN) dockerize -wait tcp://moodle_postgre:5432 -timeout 60s # FIXME
 
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
@@ -64,7 +66,7 @@ clean:  ## remove temporary data
 clean-db: \
   stop
 clean-db:  ## remove databases
-	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
+	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres moodle_postgre
 .PHONY: clean-db
 
 install: ## install tests dependencies
@@ -103,21 +105,34 @@ migrate:  ## perform database migrations
 
 run: \
   tree
-run:  ## start the service
+run:  ## start all the services
 	$(COMPOSE) up -d
 	@echo "Wait for service to be up..."
-	$(WAIT_DB)
+	$(WAIT_EDX_DB)
+	$(WAIT_MOODLE_DB)
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://moodle:80 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
 .PHONY: run
+
+run-edx: \
+  tree
+run-edx:  ## run edX service
+	$(COMPOSE) up -d
+	@echo "Wait for service to be up..."
+	$(WAIT_EDX_DB)
+	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
+	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
+.PHONY: run-edx
 
 run-moodle: ## run moodle service
 	$(COMPOSE) up -d moodle
 	@echo "Wait for service to be up..."
-	$(COMPOSE_RUN) dockerize -wait tcp://postgre:5432 -timeout 60s
+	$(WAIT_MOODLE_DB)
 	$(COMPOSE_RUN) dockerize -wait tcp://moodle:80 -timeout 60s
 .PHONY: run-moodle
 
