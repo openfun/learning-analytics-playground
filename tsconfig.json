@@ -25,6 +25,10 @@
     "sourceMap": true,
     "target": "es6"
   },
-  "include": ["e2e/cypress/integration"],
+  "include": [
+    "e2e/cypress/integration",
+    "e2e/cypress/plugins",
+    "e2e/cypress/support",
+  ],
   "exclude": ["node_modules"],
 }

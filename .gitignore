@@ -12,8 +12,8 @@ data/
 src/
 
 # End-to-end testing
-e2e/cypress/*
-!e2e/cypress/integration
+e2e/cypress/screenshots
+e2e/cypress/videos
 
 # JS dependencies
 node_modules

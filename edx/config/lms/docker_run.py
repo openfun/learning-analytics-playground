@@ -65,7 +65,7 @@ CONFIG_PREFIX = SERVICE_VARIANT + "." if SERVICE_VARIANT else ""
 ################################ ALWAYS THE SAME ##############################
 
 RELEASE = config("RELEASE", default=None)
-DEBUG = False
+DEBUG = True
 DEFAULT_TEMPLATE_ENGINE["OPTIONS"]["debug"] = False
 
 # IMPORTANT: With this enabled, the server must always be behind a proxy that

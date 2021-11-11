@@ -34,8 +34,5 @@ SESSION_COOKIE_NAME=edxcsrftoken
 # Instead set CORS_ORIGIN_WHITELIST properly
 CORS_ORIGIN_ALLOW_ALL=true
 
-# API
-EDX_API_KEY=FakeEdXAPIKey
-
 # LMS
 LMS_BASE=localhost:8072
