@@ -2,7 +2,7 @@ version: "3.2"
 services:
 
   keycloak:
-    image: "quay.io/keycloak/keycloak:14.0.0"
+    image: "quay.io/keycloak/keycloak:15.0.2"
     env_file: env.d/keycloak
     ports:
       - "8080:8080"
