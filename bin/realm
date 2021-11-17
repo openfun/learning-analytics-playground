@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+set -eo pipefail
+
+
 export PATH="/opt/jboss/keycloak/bin/:${PATH}"
 
 declare realm="${DEFAULT_REALM_NAME}"
@@ -26,6 +29,7 @@ fi
 kcadm.sh create realms -s realm="${realm}" -s enabled=true
 
 # Create a client along with its roles
+echo "Will create potsie client..."
 kcadm.sh create clients -r "${realm}" -f - < /tmp/config/clients/potsie.json
 client_uuid=$(kcadm.sh get clients -r fun-mooc --fields id -q clientId=potsie --format csv | sed 's/"//g')
 kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=admin
@@ -35,3 +39,5 @@ kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=viewer
 # Create a new user
 kcadm.sh create users -r "${realm}" -s username="${user}" -s email="${email}" -s enabled=true
 kcadm.sh set-password -r "${realm}" --username "${user}" --new-password "${password}"
+# Add role for potsie client
+kcadm.sh add-roles -r "${realm}" --uusername "${user}" --cclientid "potsie" --rolename "viewer"
