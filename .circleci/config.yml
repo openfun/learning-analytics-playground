@@ -77,7 +77,8 @@ jobs:
             test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
 
   test-e2e:
-    machine: true
+    machine:
+      image: ubuntu-2004:202201-02
     working_directory: ~/fun
     steps:
       - checkout
