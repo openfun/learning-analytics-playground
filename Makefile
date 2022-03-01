@@ -47,36 +47,28 @@ data/edx/store/.keep:
 	mkdir -p data/edx/store
 	touch data/edx/store/.keep
 
-data/edx/edx-demo-course/course.xml:
-	mkdir -p data/edx/edx-demo-course/
-	tar xzf data/edx/course.U56d1i.tar.gz -C data/edx/edx-demo-course/ --strip-components=1
-
 # Make commands
 
 bootstrap: ## bootstrap the project
 bootstrap: \
 	migrate \
-	edx-demo-course \
 	run \
 	realm
 .PHONY: bootstrap
 
+clean: \
+  remove-edx-courses
 clean:  ## remove temporary data
-	rm -rf data/edx/media data/edx/store data/edx/edx-demo-course || exit 0
+	rm -rf data/edx e2e/cypress/videos e2e/cypress/screenshots
 .PHONY: clean
 
 clean-db: \
+  remove-edx-courses \
   stop
 clean-db:  ## remove LMS databases
+	rm -f e2e/edx_courses_config.json
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
 .PHONY: clean-db
-
-edx-demo-course: \
-  data/edx/edx-demo-course/course.xml
-edx-demo-course:  ## Import demo course from edX repository
-	$(COMPOSE_RUN) -v $(PWD)/data/edx/edx-demo-course:/edx/app/edxapp/edx-demo-course edx_cms \
-		python manage.py cms import /edx/var/edxapp/data /edx/app/edxapp/edx-demo-course
-.PHONY: edx-demo-course
 
 install: ## install tests dependencies
 	$(YARN) install
@@ -152,8 +144,10 @@ down:  ## stop and remove docker containers
 	$(COMPOSE) down
 .PHONY: down
 
+test: \
+	remove-edx-courses
 test: ## run tests
-	$(COMPOSE_RUN) cypress run --config-file false
+	$(COMPOSE_RUN) cypress run
 .PHONY: test
 
 tree: \
@@ -161,6 +155,13 @@ tree: \
 	data/edx/store/.keep
 tree:  ## create data directories mounted as volumes
 .PHONY: tree
+
+remove-edx-courses:  ## remove seeded edx courses
+	rm -f e2e/edx_courses_config.json
+	$(COMPOSE_RUN) edx_lms python manage.py lms dump_course_ids | \
+	grep -Eo 'course-v1:[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+' | \
+	xargs -I{} bash -c "yes | $(COMPOSE_RUN) edx_cms python manage.py cms delete_course {}"
+.PHONY: remove-edx-courses
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

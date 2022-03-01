@@ -7,79 +7,83 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
+
 const Graylog = require("./graylog");
 const utils = require("./utils");
 
-Cypress.Commands.add("lmsLogin", (email, password) => {
-  cy.visit("http://edx_lms:8000/login");
-  cy.get("input#email").type(email);
-  cy.get("div:nth-child(4) > input[name=password]").type(password);
-  cy.get("form > button#submit").click();
-  cy.url().should("include", "/dashboard");
-});
+const login = (email, password, url) => {
+  const method = "POST";
+  const form = true;
+  const body = { email, password, honor_code: true };
+  return cy.request({ url, method, form, body }).then((response) => {
+    expect(response.status).to.equal(200);
+    return response;
+  });
+};
 
-Cypress.Commands.add("lmsLogout", () => {
-  cy.visit("http://edx_lms:8000/");
-  cy.get("body > #top-menu > .right-header > .toggle-dropdown-menu").click();
-  cy.get(
-    "#top-menu > .right-header > .fun-dropdown-menu > li:nth-child(3) > a"
-  ).click();
-});
+const cmsLogin = (email, password) => {
+  return login(email, password, `${Cypress.env("EDX_CMS_URL")}/login_post`);
+};
 
-Cypress.Commands.add("cmsLogin", (email, password) => {
-  cy.request({ method: "GET", url: "http://edx_cms:8000/signin" }).then(
-    (response) => {
-      const cookie = response.headers["set-cookie"][0].substring(10, 42);
-      return cy
-        .request({
-          method: "POST",
-          url: "http://edx_cms:8000/login_post",
-          headers: { "X-CSRFToken": cookie, Cookie: `csrftoken=${cookie}` },
-          form: true,
-          body: { email, password, honor_code: true },
-        })
-        .then((response2) => {
-          expect(response2.status).to.equal(200);
-          return { cookie, response2 };
-        });
-    }
+const lmsLogin = (email, password) => {
+  return login(email, password, "/login_ajax");
+};
+
+Cypress.Commands.add("cmsLogin", cmsLogin);
+
+Cypress.Commands.add("cmsLoginAdmin", () => {
+  return cmsLogin(
+    Cypress.env("EDX_ADMIN_EMAIL"),
+    Cypress.env("EDX_ADMIN_PASSWORD")
   );
 });
 
-Cypress.Commands.add("lmsEnroll", (enroll = true) => {
+Cypress.Commands.add("lmsLogin", lmsLogin);
+
+Cypress.Commands.add("lmsLoginAdmin", () => {
+  return lmsLogin(
+    Cypress.env("EDX_ADMIN_EMAIL"),
+    Cypress.env("EDX_ADMIN_PASSWORD")
+  );
+});
+
+Cypress.Commands.add("lmsLoginStudent", () => {
+  return lmsLogin(
+    Cypress.env("EDX_STUDENT_EMAIL"),
+    Cypress.env("EDX_STUDENT_PASSWORD")
+  );
+});
+
+Cypress.Commands.add("lmsEnroll", (enroll, course = null) => {
+  const { courseId } = course || Cypress.env("EDX_COURSES").demoCourse1;
+  const enrollmentAction = enroll ? "enroll" : "unenroll";
   return cy
-    .getCookie("csrftoken")
-    .should("exist")
-    .then((cookie) => {
-      return cy.request({
-        method: "POST",
-        url: "http://edx_lms:8000/change_enrollment",
-        form: true,
-        headers: {
-          "X-CSRFToken": cookie.value,
-        },
-        body: {
-          course_id: "course-v1:organisation+numero_du_cours+course",
-          enrollment_action: enroll ? "enroll" : "unenroll",
-        },
-      });
+    .request({
+      method: "POST",
+      url: "/change_enrollment",
+      form: true,
+      body: { course_id: courseId, enrollment_action: enrollmentAction },
     })
     .then((response) => {
       expect(response.status).to.equal(200);
-      cy.visit("http://edx_lms:8000/dashboard");
-      cy.get("#my-courses").should(
-        enroll ? "contain" : "not.contain",
-        "nom_du_cours"
-      );
+      return response;
     });
 });
+
+Cypress.Commands.add(
+  "getSection",
+  (sectionName, chapterName = "demoChapter1", courseName = "demoCourse1") => {
+    const course = Cypress.env("EDX_COURSES")[courseName];
+    return course.chapter[chapterName].chapter.sequential[sectionName];
+  }
+);
 
 Cypress.Commands.add("graylogPartialMatch", (partialEvent) => {
   let isMatch = false;
   const graylog = new Graylog(Cypress.env());
+  // EdX writes logs to graylog asynchronously.
+  // Therefore we wait a bit to get the results.
+  cy.wait(100);
   cy.request({
     method: "POST",
     url: `http://graylog:9000/api/views/search/${graylog.searchId}/execute`,
@@ -109,14 +113,3 @@ Cypress.Commands.add("graylogPartialMatch", (partialEvent) => {
     }
   });
 });
-
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })

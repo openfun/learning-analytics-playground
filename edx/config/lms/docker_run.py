@@ -638,8 +638,9 @@ if "PREVIEW_LMS_BASE" in FEATURES and FEATURES["PREVIEW_LMS_BASE"] != "":
 ############### Mixed Related(Secure/Not-Secure) Items ##########
 LMS_SEGMENT_KEY = config("LMS_SEGMENT_KEY", default=None)
 
-CC_PROCESSOR_NAME = config("CC_PROCESSOR_NAME", default=CC_PROCESSOR_NAME)
+CC_PROCESSOR_NAME = config("CC_PROCESSOR_NAME", default="CyberSource2")
 CC_PROCESSOR = config("CC_PROCESSOR", default=CC_PROCESSOR)
+CC_PROCESSOR['CyberSource2']['PURCHASE_ENDPOINT'] = '/shoppingcart/payment_fake/'
 
 SECRET_KEY = config("SECRET_KEY", default="ThisisAnExampleKeyForDevPurposeOnly")
 
@@ -1563,4 +1564,15 @@ AUTHENTICATION_BACKENDS = config(
     "AUTHENTICATION_BACKENDS",
     default=["django.contrib.auth.backends.ModelBackend"],
     formatter=json.loads
+)
+
+# Avoid the CsrfMiddleware to speedup tests 
+deactivated_middleware = [
+    'corsheaders.middleware.CorsMiddleware',
+    'cors_csrf.middleware.CsrfCrossDomainCookieMiddleware',
+    'cors_csrf.middleware.CorsCSRFMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware'
+]
+MIDDLEWARE_CLASSES = list(
+    filter(lambda x: x not in deactivated_middleware, MIDDLEWARE_CLASSES)
 )

@@ -846,3 +846,14 @@ PIPELINE_ENABLED = False
 ALLOWED_HOSTS = ["*"]
 
 FEATURES["AUTOMATIC_AUTH_FOR_TESTING"] = True
+
+# Avoid the CsrfMiddleware to speedup tests 
+deactivated_middleware = [
+    'corsheaders.middleware.CorsMiddleware',
+    'cors_csrf.middleware.CsrfCrossDomainCookieMiddleware',
+    'cors_csrf.middleware.CorsCSRFMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware'
+]
+MIDDLEWARE_CLASSES = list(
+    filter(lambda x: x not in deactivated_middleware, MIDDLEWARE_CLASSES)
+)

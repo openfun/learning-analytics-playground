@@ -3,8 +3,9 @@ const http = require("http");
 
 class HttpWrapper {
   static isUrlEncoded(options) {
-    return options.headers["Content-Type"].includes(
-      "application/x-www-form-urlencoded"
+    const contentType = options.headers["Content-Type"];
+    return (
+      contentType && contentType.includes("application/x-www-form-urlencoded")
     );
   }
 
@@ -19,6 +20,10 @@ class HttpWrapper {
   }
 
   static encode(options, payload) {
+    delete options.headers["Content-Length"];
+    if (!payload) {
+      return null;
+    }
     const encoded = HttpWrapper.isUrlEncoded(options)
       ? this.urlEncode(payload)
       : this.jsonEncode(payload);
@@ -28,39 +33,73 @@ class HttpWrapper {
 
   /** Promise wrapper for http.request. */
   promiseRequest = (options, callback = null, payload = null) => {
-    options = Object.assign(this.commonOptions, options);
-    callback = callback || ((data) => JSON.parse(data));
-    let encodedPayload = null;
-    if (payload) {
-      encodedPayload = HttpWrapper.encode(options, payload);
-    }
+    const mergedOptions = { ...this.commonOptions, ...options };
+    callback = callback || (() => {});
+    payload = HttpWrapper.encode(mergedOptions, payload);
     return new Promise((resolve, reject) => {
-      const request = http.request(options, (response) => {
-        let data = "";
-        response.on("data", (chunk) => (data += chunk));
-        response.on("end", () => resolve(callback(data, response)));
-      });
+      const request = this.request(mergedOptions, resolve, callback);
       request.on("error", (error) => {
         // eslint-disable-next-line no-console
         console.error(error);
         reject(error);
       });
       if (payload) {
-        request.write(encodedPayload);
+        request.write(payload);
       }
       request.end();
     });
   };
+
+  request = (options, resolve, callback) => {
+    return http.request(options, (response) => {
+      if (response.statusCode >= 400) {
+        const msg = `Response status code ${response.statusCode}`;
+        // eslint-disable-next-line no-console
+        console.error(msg);
+      }
+      let data = "";
+      response.on("data", (chunk) => (data += chunk));
+      response.on("end", () => resolve(callback(data, response)));
+    });
+  };
 }
 
-module.exports.HttpWrapper = HttpWrapper;
-
 // From https://stackoverflow.com/a/61676007
-module.exports.isSubset = (superObj, subObj) => {
+const isSubset = (superObj, subObj) => {
   return Object.keys(subObj).every((ele) => {
-    if (typeof subObj[ele] === "object") {
+    if (typeof subObj[ele] === "object" && typeof superObj[ele] === "object") {
       return isSubset(superObj[ele], subObj[ele]);
     }
     return subObj[ele] === superObj[ele];
   });
 };
+
+const getProblem = (section, problemName, unitName = null) => {
+  unitName = unitName || problemName;
+  return section.vertical[unitName].problem[problemName];
+};
+
+const getSectionAndURL = (
+  sectionName,
+  chapterName = "demoChapter1",
+  courseName = "demoCourse1"
+) => {
+  const course = Cypress.env("EDX_COURSES")[courseName];
+  const chapter = course.chapter[chapterName];
+  const section = chapter.sequential[sectionName];
+  const { courseId } = course;
+  const chapterId = getXblockId(chapter);
+  const sectionId = getXblockId(section);
+  const sectionUrl = `/courses/${courseId}/courseware/${chapterId}/${sectionId}/`;
+  return [section, sectionUrl];
+};
+
+const getXblockId = (xBlock) => {
+  return xBlock.locator.slice(-32);
+};
+
+module.exports.HttpWrapper = HttpWrapper;
+module.exports.isSubset = isSubset;
+module.exports.getSectionAndURL = getSectionAndURL;
+module.exports.getProblem = getProblem;
+module.exports.getXblockId = getXblockId;

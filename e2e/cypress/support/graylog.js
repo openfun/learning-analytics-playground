@@ -21,7 +21,7 @@ class Graylog extends HttpWrapper {
     this.searchTypeId = env.GRAYLOG_TEST_SEARCH_TYPE_ID;
   }
 
-  getInputConfiguration(nodeId) {
+  getInputConfiguration = (nodeId) => {
     return {
       title: this.title,
       type: "org.graylog2.inputs.gelf.tcp.GELFTCPInput",
@@ -32,9 +32,9 @@ class Graylog extends HttpWrapper {
       },
       node: nodeId,
     };
-  }
+  };
 
-  getSearchConfiguration(inputId) {
+  getSearchConfiguration = (inputId) => {
     return {
       id: this.searchId,
       queries: [
@@ -58,63 +58,53 @@ class Graylog extends HttpWrapper {
         },
       ],
     };
-  }
+  };
 
   /** Returns the first nodeId of the graylog cluster. */
-  getNodeId() {
-    const options = { path: "/api/cluster", method: "GET" };
-    return this.promiseRequest(
-      options,
-      (data) => Object.keys(JSON.parse(data))[0]
-    );
-  }
+  getNodeId = () => {
+    const options = { path: "/api/cluster" };
+    const callback = (data) => Object.keys(JSON.parse(data))[0];
+    return this.promiseRequest(options, callback, (data) => JSON.parse(data));
+  };
 
   /** Returns the graylog search for the given id. */
-  getSearch(searchId) {
-    const options = { path: `/api/views/search/${searchId}`, method: "GET" };
-    return this.promiseRequest(options);
-  }
+  getSearch = (searchId) => {
+    const options = { path: `/api/views/search/${searchId}` };
+    return this.promiseRequest(options, (data) => JSON.parse(data));
+  };
 
   /** Returns the list of graylog inputs. */
-  listInputs() {
-    const options = { path: "/api/system/inputs", method: "GET" };
+  listInputs = () => {
+    const options = { path: "/api/system/inputs" };
     return this.promiseRequest(options, (data) => JSON.parse(data).inputs);
-  }
+  };
 
   /** Creates a graylog input for the specified node. */
-  createInput(nodeId) {
+  createInput = (nodeId) => {
     const options = { path: "/api/system/inputs", method: "POST" };
-    return this.promiseRequest(
-      options,
-      null,
-      this.getInputConfiguration(nodeId)
-    );
-  }
+    const payload = this.getInputConfiguration(nodeId);
+    return this.promiseRequest(options, (data) => JSON.parse(data), payload);
+  };
 
   /** Activates the graylog input. */
-  activateInput(inputId) {
+  activateInput = (inputId) => {
     const options = {
       path: `/api/system/inputstates/${inputId}`,
       method: "PUT",
     };
-    return this.promiseRequest(
-      options,
-      (_, response) => response.statusCode === 200
-    );
-  }
+    const callback = (_, response) => response.statusCode === 200;
+    return this.promiseRequest(options, callback, (data) => JSON.parse(data));
+  };
 
   /** Creates a Graylog search. */
-  createSearch(inputId) {
+  createSearch = (inputId) => {
     const options = { path: "/api/views/search", method: "POST" };
-    return this.promiseRequest(
-      options,
-      null,
-      this.getSearchConfiguration(inputId)
-    );
-  }
+    const payload = this.getSearchConfiguration(inputId);
+    return this.promiseRequest(options, (data) => JSON.parse(data), payload);
+  };
 
   /** Creates the test graylog input and test graylog search if they don't already exist. */
-  async initializeInput() {
+  initializeInput = async () => {
     // Note regarding the Graylog input:
     // We want to create and use only one input to keep the event history from multiple test runs.
     // However, Graylogs REST API doesn't provide a way to create an input with a specific ID.
@@ -137,7 +127,7 @@ class Graylog extends HttpWrapper {
     if (search.message === `Search with id ${this.searchId} does not exist`) {
       search = await this.createSearch(inputId);
     }
-  }
+  };
 }
 
 module.exports = Graylog;

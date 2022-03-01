@@ -41,6 +41,9 @@ In this playground, end-to-end tests have been implemented to simulate learning 
 
 As this project is evolving, the tests will progressively comprises a wide panel of use cases.
 
+> Note that when running the tests for the first time their execution takes a bit longer because 
+> of the course seeding.
+
 The following command runs end-to-end tests:
 
 ```

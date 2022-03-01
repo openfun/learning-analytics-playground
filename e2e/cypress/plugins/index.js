@@ -18,10 +18,14 @@ module.exports = async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
   const graylog = new Graylog(config.env);
-  const cms = new EdxCms(config.env);
   await graylog.initializeInput();
-  const token = await cms.getCsrftoken();
-  const cookie = await cms.getLoginCookie(token);
-  await cms.addStaffMember(config.env.EDX_ADMIN_EMAIL, cookie);
+  const coursesConfig = config.env.EDX_COURSES_CONFIG;
+  try {
+    config.env.EDX_COURSES = require(`../../${coursesConfig}.json`);
+  } catch {
+    const edxCms = new EdxCms(config.env);
+    await edxCms.seedCourses();
+    config.env.EDX_COURSES = require(`../../${coursesConfig}.json`);
+  }
   return config;
 };

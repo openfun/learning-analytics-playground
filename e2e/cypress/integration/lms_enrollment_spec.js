@@ -1,136 +1,87 @@
-// LMS Enrollment Test
+// LMS enrollment tests
 
-describe("LMS Enrollment Test as student", () => {
+describe("LMS Student Enrollment Test", () => {
   before(() => {
-    cy.lmsLogin(
-      Cypress.env("EDX_STUDENT_EMAIL"),
-      Cypress.env("EDX_STUDENT_PASSWORD")
-    );
-  });
-
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce("csrftoken", "edxcsrftoken");
-  });
-
-  after(() => {
-    cy.lmsLogout();
-  });
-
-  it("should enroll to the demo course", () => {
+    cy.lmsLoginStudent();
     cy.lmsEnroll(true);
-  });
-
-  it("should unenroll to the demo course", () => {
     cy.lmsEnroll(false);
   });
 
-  it("should log enroll event", { retries: 9 }, () => {
+  it("should log enrollment activated event", { retries: 9 }, () => {
     cy.graylogPartialMatch({ name: "edx.course.enrollment.activated" });
   });
 
-  it("should log unenroll event", { retries: 9 }, () => {
+  it("should log enrollment deactivated event", { retries: 9 }, () => {
     cy.graylogPartialMatch({ name: "edx.course.enrollment.deactivated" });
   });
 });
 
-describe("LMS Enrollment Test as admin", () => {
+describe("LMS Change Enrollment Test", () => {
   before(() => {
-    // Note: we are enrolling the student before adding the enrollment mode
-    // to avoid additional steps in the enrollment process when there are
-    // multiple enrollment modes available.
-    cy.lmsLogin(
-      Cypress.env("EDX_STUDENT_EMAIL"),
-      Cypress.env("EDX_STUDENT_PASSWORD")
-    );
+    const { courseId } = Cypress.env("EDX_COURSES").demoCourse1;
+
+    // Note: enrolling the student before adding a new enrollment mode
+    // avoids additional steps during enrollment.
+    cy.lmsLoginStudent();
     cy.lmsEnroll(true);
-    cy.lmsLogout();
-    cy.lmsLogin(
-      Cypress.env("EDX_ADMIN_EMAIL"),
-      Cypress.env("EDX_ADMIN_PASSWORD")
-    );
-    // add verified enrollment mode from the admin panel
-    cy.visit("http://edx_lms:8000/admin/course_modes/coursemode/add/");
-    cy.get("div > .module > .form-row > div > #id_course_id").type(
-      "course-v1:organisation+numero_du_cours+course"
-    );
-    cy.get("div > .module > .form-row > div > #id_mode_slug").select(
-      "verified"
-    );
-    cy.get("div > .module > .form-row > div > #id_mode_display_name").type(
-      "verified"
-    );
-    cy.get(
-      "#content-main > #coursemode_form > div > .submit-row > .default"
-    ).click();
-  });
+    cy.lmsLoginAdmin();
 
-  beforeEach(() => {
-    Cypress.Cookies.preserveOnce("csrftoken", "edxcsrftoken");
-  });
+    // Add `verified` enrollment mode from the admin panel.
+    cy.visit(`/admin/course_modes/coursemode/add/`);
+    cy.get("#id_course_id").type(courseId);
+    cy.get("#id_mode_slug").select("verified");
+    cy.get("#id_mode_display_name").type("verified");
+    cy.get("#id_min_price").clear().type("1");
+    cy.get("#coursemode_form > div > .submit-row > .default").click();
 
-  after(() => {
-    // remove verified enrollment mode from the admin panel
-    cy.visit("http://edx_lms:8000/admin/course_modes/coursemode/");
-    cy.get(
-      "tr > .action-checkbox-column > .text > span > #action-toggle"
-    ).check("on");
-    cy.get("#changelist > #changelist-form > .actions > label > select").select(
-      "delete_selected"
-    );
-    cy.get(
-      "#content-main > #changelist > #changelist-form > .actions > .button"
-    ).click();
-    cy.get("#container > #content > form > div > input:nth-child(4)").click();
-    cy.lmsLogout();
-    cy.lmsLogin(
-      Cypress.env("EDX_STUDENT_EMAIL"),
-      Cypress.env("EDX_STUDENT_PASSWORD")
-    );
-    cy.lmsEnroll(false);
-    cy.lmsLogout();
-  });
-
-  it("should change a student enrollment mode", () => {
-    // modify enrollment to verified mode
-    // triggers edx.course.enrollment.mode_changed
+    // Modify enrollment to verified mode.
+    // Triggers edx.course.enrollment.mode_changed
     cy.getCookie("csrftoken")
       .should("exist")
       .then((cookie) => {
         cy.request({
           method: "POST",
-          url: "http://edx_lms:8000/api/enrollment/v1/enrollment",
+          url: `/api/enrollment/v1/enrollment`,
           form: true,
-          headers: {
-            "X-CSRFToken": cookie.value,
-          },
           body: {
             csrfmiddlewaretoken: cookie.value,
             _content_type: "application/json",
             _content: JSON.stringify({
               mode: "verified",
-              course_details: {
-                course_id: "course-v1:organisation+numero_du_cours+course",
-              },
+              course_details: { course_id: courseId },
             }),
           },
         });
       });
-  });
 
-  it("should upgrade a student enrollment mode", () => {
-    // upgrade enrollment to verified mode
-    cy.lmsLogout();
-    cy.lmsLogin(
-      Cypress.env("EDX_STUDENT_EMAIL"),
-      Cypress.env("EDX_STUDENT_PASSWORD")
-    );
-    // triggers edx.course.enrollment.upgrade.clicked
+    // Upgrade enrollment to verified mode.
+    // Triggers edx.course.enrollment.upgrade.clicked
+    cy.lmsLoginStudent();
+    cy.visit("/dashboard");
     cy.get("#upgrade-to-verified").click();
-    cy.lmsLogout();
-    cy.lmsLogin(
-      Cypress.env("EDX_ADMIN_EMAIL"),
-      Cypress.env("EDX_ADMIN_PASSWORD")
-    );
+    cy.url().should("include", "/verify_student/upgrade/");
+    // Go to fake payment page.
+    cy.get("#CyberSource2").click({ force: true });
+    // Submit fake payment.
+    // Triggers edx.course.enrollment.upgrade.succeeded
+    cy.get("form[name=input] input[type=submit]").click();
+    cy.url().should("include", "/verify_student/payment-confirmation/");
+
+    // Remove verified enrollment mode from the admin panel.
+    cy.lmsLoginAdmin();
+    cy.visit(`/admin/course_modes/coursemode/`);
+    cy.get("#action-toggle").check("on");
+    cy.get("#changelist-form select").select("delete_selected");
+    cy.get("#changelist-form button").click();
+    cy.get("form div input:last-of-type").click();
+
+    // Reset admin enrollment.
+    cy.lmsEnroll(false);
+    cy.lmsEnroll(true);
+
+    // Unenroll student.
+    cy.lmsLoginStudent();
+    cy.lmsEnroll(false);
   });
 
   it("should log enrollment mode changed event", { retries: 9 }, () => {
@@ -139,5 +90,9 @@ describe("LMS Enrollment Test as admin", () => {
 
   it("should log enrollment upgrade clicked event", { retries: 9 }, () => {
     cy.graylogPartialMatch({ name: "edx.course.enrollment.upgrade.clicked" });
+  });
+
+  it("should log enrollment upgrade succeeded event", { retries: 9 }, () => {
+    cy.graylogPartialMatch({ name: "edx.course.enrollment.upgrade.succeeded" });
   });
 });

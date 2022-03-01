@@ -89,7 +89,7 @@ jobs:
           command: make bootstrap
       - run:
           name: Run e2e tests
-          command: make run-edx && make test
+          command: make run-edx test
 
   lint-test:
     docker:
