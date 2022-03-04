@@ -15,6 +15,7 @@ and this project adheres to
 - Add graylog service
 - Add edx lms service
 - Add keycloak service
+- Add edX course generator
 
 
 [Unreleased]: https://github.com/openfun/learning-analytics-playground/commits/main

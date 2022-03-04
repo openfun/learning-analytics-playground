@@ -63,6 +63,7 @@ clean:  ## remove temporary data
 .PHONY: clean
 
 clean-db: \
+  remove-edx-courses \
   stop
 clean-db:  ## remove LMS databases
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
@@ -155,6 +156,7 @@ tree:  ## create data directories mounted as volumes
 .PHONY: tree
 
 remove-edx-courses:  ## remove all edX courses
+	rm -f e2e/edx_courses_config.json
 	$(COMPOSE_RUN) edx_lms python manage.py lms dump_course_ids | \
 	grep -Eo 'course-v1:[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+' | \
 	xargs -I{} bash -c "yes | $(COMPOSE_RUN) edx_cms python manage.py cms delete_course {}"

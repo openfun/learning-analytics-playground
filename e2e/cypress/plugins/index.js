@@ -12,6 +12,7 @@
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
 
+const EdxCms = require("../support/edx_cms");
 const Graylog = require("../support/graylog");
 
 /**
@@ -23,5 +24,13 @@ module.exports = async (on, config) => {
   // `config` is the resolved Cypress config
   const graylog = new Graylog(config.env);
   await graylog.initializeInput();
+  const coursesConfig = config.env.EDX_COURSES_CONFIG;
+  try {
+    config.env.EDX_COURSES = require(`../../${coursesConfig}.json`);
+  } catch {
+    const edxCms = new EdxCms(config.env);
+    await edxCms.seedCourses();
+    config.env.EDX_COURSES = require(`../../${coursesConfig}.json`);
+  }
   return config;
 };
