@@ -35,7 +35,8 @@ SESSION_COOKIE_NAME=edxcsrftoken
 CORS_ORIGIN_ALLOW_ALL=true
 
 # API
-EDX_API_KEY=FakeEdXAPIKey
+# When the EDX_API_KEY is None - we skip payment verifications during (payed) enrollment.
+# EDX_API_KEY=FakeEdXAPIKey
 
 # LMS
 LMS_BASE=localhost:8072

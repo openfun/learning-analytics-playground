@@ -5,15 +5,15 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "lib": [
-      "dom",
-      "dom.iterable",
-      "es6",
-      "scripthost",
-      "es2015",
-      "es2016",
-      "es2017",
-      "es2020.intl",
-      "esnext.intl"
+      "DOM",
+      "DOM.Iterable",
+      "ES6",
+      "ScriptHost",
+      "ES2015",
+      "ES2016",
+      "ES2017",
+      "ES2020.Intl",
+      "ESNext.Intl"
     ],
     "module": "esnext",
     "moduleResolution": "node",
@@ -25,6 +25,10 @@
     "sourceMap": true,
     "target": "es6"
   },
-  "include": ["e2e/cypress/integration"],
+  "include": [
+    "e2e/cypress/integration",
+    "e2e/cypress/plugins",
+    "e2e/cypress/support",
+  ],
   "exclude": ["node_modules"],
 }

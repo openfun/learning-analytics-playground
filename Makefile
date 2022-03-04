@@ -56,8 +56,10 @@ bootstrap: \
 	realm
 .PHONY: bootstrap
 
+clean: \
+  remove-edx-courses
 clean:  ## remove temporary data
-	rm -rf data/* || exit 0
+	rm -rf data/edx e2e/cypress/videos e2e/cypress/screenshots
 .PHONY: clean
 
 clean-db: \
@@ -118,7 +120,7 @@ run-edx:  ## start edx services
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_redis:6379 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_lms:8000 -timeout 60s
 	$(COMPOSE_RUN) dockerize -wait tcp://edx_cms:8000 -timeout 60s
-.PHONY: run
+.PHONY: run-edx
 
 realm:  ## import configured keycloak realm
 	$(COMPOSE) exec \
@@ -140,6 +142,8 @@ down:  ## stop and remove docker containers
 	$(COMPOSE) down
 .PHONY: down
 
+test: \
+	remove-edx-courses
 test: ## run tests
 	$(COMPOSE_RUN) cypress run --config-file false
 .PHONY: test
@@ -149,6 +153,12 @@ tree: \
 	data/edx/store/.keep
 tree:  ## create data directories mounted as volumes
 .PHONY: tree
+
+remove-edx-courses:  ## remove all edX courses
+	$(COMPOSE_RUN) edx_lms python manage.py lms dump_course_ids | \
+	grep -Eo 'course-v1:[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+\+[0-9A-Za-z_-]+' | \
+	xargs -I{} bash -c "yes | $(COMPOSE_RUN) edx_cms python manage.py cms delete_course {}"
+.PHONY: remove-edx-courses
 
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

@@ -2,13 +2,13 @@
 
 describe("CMS Login Test", () => {
   it("should fill login form and redirect to home", { retries: 5 }, () => {
-    cy.visit("http://edx_cms:8000/");
+    cy.visit(Cypress.env("EDX_CMS_URL"));
 
     // enter credentials
     cy.get("div#view-top li.nav-item.nav-not-signedin-signin > a").click();
     cy.url().should("include", "/signin");
-    cy.get("input#email").type("admin@example.com");
-    cy.get("input#password").type("admin");
+    cy.get("input#email").type(`${Cypress.env("EDX_ADMIN_EMAIL")}`);
+    cy.get("input#password").type(`${Cypress.env("EDX_ADMIN_PASSWORD")}`);
 
     // submit login form
     cy.get("button#submit").click();

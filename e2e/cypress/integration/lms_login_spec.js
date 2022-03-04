@@ -2,11 +2,13 @@
 
 describe("LMS Login Test", () => {
   it("should fill login form and redirect to dashboard", { retries: 5 }, () => {
-    cy.visit("http://edx_lms:8000/login");
+    cy.visit("/login");
 
     // enter credentials
-    cy.get("input#email").type("edx@example.com");
-    cy.get("div:nth-child(4) > input[name=password]").type("edx");
+    cy.get("input#email").type(`${Cypress.env("EDX_STUDENT_EMAIL")}`);
+    cy.get("div:nth-child(4) > input[name=password]").type(
+      `${Cypress.env("EDX_STUDENT_PASSWORD")}`
+    );
 
     // submit login form
     cy.get("form > button#submit").click();
