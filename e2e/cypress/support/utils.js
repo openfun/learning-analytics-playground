@@ -74,5 +74,32 @@ const isSubset = (superObj, subObj) => {
   });
 };
 
+const getProblem = (section, problemName, unitName = null) => {
+  unitName = unitName || problemName;
+  return section.vertical[unitName].problem[problemName];
+};
+
+const getSectionAndURL = (
+  sectionName,
+  chapterName = "demoChapter1",
+  courseName = "demoCourse1"
+) => {
+  const course = Cypress.env("EDX_COURSES")[courseName];
+  const chapter = course.chapter[chapterName];
+  const section = chapter.sequential[sectionName];
+  const { courseId } = course;
+  const chapterId = getXblockId(chapter);
+  const sectionId = getXblockId(section);
+  const sectionUrl = `/courses/${courseId}/courseware/${chapterId}/${sectionId}/`;
+  return [section, sectionUrl];
+};
+
+const getXblockId = (xBlock) => {
+  return xBlock.locator.slice(-32);
+};
+
 module.exports.HttpWrapper = HttpWrapper;
 module.exports.isSubset = isSubset;
+module.exports.getSectionAndURL = getSectionAndURL;
+module.exports.getProblem = getProblem;
+module.exports.getXblockId = getXblockId;
