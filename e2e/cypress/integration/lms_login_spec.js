@@ -1,7 +1,7 @@
 // LMS Login Test
 
 describe("LMS Login Test", () => {
-  it("should fill login form and redirect to dashboard", { retries: 5 }, () => {
+  it("should fill login form and redirect to dashboard", () => {
     cy.visit("/login");
 
     // enter credentials
@@ -25,11 +25,11 @@ describe("LMS Login Test", () => {
     cy.title().should("include", "FUN - Se former en liberté");
   });
 
-  it("should log /dashboard server event", { retries: 9 }, () => {
+  it("should log /dashboard server event", () => {
     cy.graylogPartialMatch({ event_type: "/dashboard" });
   });
 
-  it("should log /logout server event", { retries: 9 }, () => {
+  it("should log /logout server event", () => {
     cy.graylogPartialMatch({ event_type: "/logout" });
   });
 });

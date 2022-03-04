@@ -16,6 +16,7 @@ and this project adheres to
 - Add edx lms service
 - Add keycloak service
 - Add edX course generator
+- Add edX enrollment event tests
 
 
 [Unreleased]: https://github.com/openfun/learning-analytics-playground/commits/main
