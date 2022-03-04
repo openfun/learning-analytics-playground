@@ -1,7 +1,7 @@
 // CMS Login Test
 
 describe("CMS Login Test", () => {
-  it("should fill login form and redirect to home", { retries: 5 }, () => {
+  it("should fill login form and redirect to home", () => {
     cy.visit(Cypress.env("EDX_CMS_URL"));
 
     // enter credentials

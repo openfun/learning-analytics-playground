@@ -26,6 +26,47 @@ const utils = require("./utils");
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
+const adminEmail = Cypress.env("EDX_ADMIN_EMAIL");
+const adminPass = Cypress.env("EDX_ADMIN_PASSWORD");
+const studentEmail = Cypress.env("EDX_STUDENT_EMAIL");
+const studentPass = Cypress.env("EDX_STUDENT_PASSWORD");
+
+const login = (email, password, url) => {
+  const method = "POST";
+  const form = true;
+  const body = { email, password, honor_code: true };
+  return cy.request({ url, method, form, body }).then((response) => {
+    expect(response.status).to.equal(200);
+    return response;
+  });
+};
+
+const cmsLogin = (email, password) =>
+  login(email, password, `${Cypress.env("EDX_CMS_URL")}/login_post`);
+
+const lmsLogin = (email, password) => login(email, password, "/login_ajax");
+
+Cypress.Commands.add("cmsLogin", cmsLogin);
+Cypress.Commands.add("lmsLogin", lmsLogin);
+Cypress.Commands.add("cmsLoginAdmin", () => cmsLogin(adminEmail, adminPass));
+Cypress.Commands.add("lmsLoginAdmin", () => lmsLogin(adminEmail, adminPass));
+Cypress.Commands.add("lmsLoginStudent", () =>
+  lmsLogin(studentEmail, studentPass)
+);
+
+Cypress.Commands.add("lmsEnroll", (enroll, course = null) => {
+  const { courseId } = course || Cypress.env("EDX_COURSES").demoCourse1;
+  const enrollmentAction = enroll ? "enroll" : "unenroll";
+  return cy
+    .request({
+      method: "POST",
+      url: "/change_enrollment",
+      form: true,
+      body: { course_id: courseId, enrollment_action: enrollmentAction },
+    })
+    .then((response) => expect(response.status).to.equal(200));
+});
+
 Cypress.Commands.add("graylogPartialMatch", (partialEvent) => {
   let isMatch = false;
   const env = Cypress.env();
