@@ -14,6 +14,7 @@ src/
 # End-to-end testing
 e2e/cypress/screenshots
 e2e/cypress/videos
+e2e/edx_courses_config.json
 
 # JS dependencies
 node_modules
