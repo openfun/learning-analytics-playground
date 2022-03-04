@@ -3,6 +3,8 @@ services:
   cypress:
     image: "cypress/included:8.3.0"
     entrypoint: cypress
+    env_file:
+      - env.d/cypress
     working_dir: /e2e
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
