@@ -24,4 +24,12 @@ describe("LMS Login Test", () => {
 
     cy.title().should("include", "FUN - Se former en liberté");
   });
+
+  it("should log /dashboard server event", { retries: 9 }, () => {
+    cy.graylogPartialMatch({ event_type: "/dashboard" });
+  });
+
+  it("should log /logout server event", { retries: 9 }, () => {
+    cy.graylogPartialMatch({ event_type: "/logout" });
+  });
 });
