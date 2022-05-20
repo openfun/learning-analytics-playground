@@ -16,3 +16,8 @@ services:
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
       - .:/app
+
+  ffmpeg:
+    image: "jrottenberg/ffmpeg:5.1-alpine"
+    volumes:
+      - ./e2e:/e2e

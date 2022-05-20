@@ -47,6 +47,12 @@ data/edx/store/.keep:
 	mkdir -p data/edx/store
 	touch data/edx/store/.keep
 
+e2e/data/video.mp4:  ## generate a 5 second long video and put it in e2e/data directory
+	mkdir -p e2e/data
+	$(COMPOSE_RUN) ffmpeg -y -f lavfi -i testsrc=size=1920x1080:rate=1 -vf hue=s=0 \
+		-vcodec libx264 -preset superfast -tune zerolatency -pix_fmt yuv420p -t 5 \
+		-movflags +faststart "/e2e/data/video.mp4"
+
 # Make commands
 
 bootstrap: ## bootstrap the project
@@ -144,6 +150,7 @@ down:  ## stop and remove docker containers
 .PHONY: down
 
 test: \
+	e2e/data/video.mp4 \
 	remove-edx-courses
 test: ## run tests
 	$(COMPOSE_RUN) cypress run --config-file false
