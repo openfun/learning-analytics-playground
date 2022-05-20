@@ -28,6 +28,23 @@
             "entrance_exam_id": "",
             "self_paced": false
         },
+        "assets": {
+            "video": {
+                "body": {
+                    "contentType": "video/mp4",
+                    "filename": "video.mp4"
+                },
+                "display_name": null,
+                "content_type": null,
+                "url": null,
+                "date_added": null,
+                "id": null,
+                "portable_url": null,
+                "thumbnail": null,
+                "locked": null,
+                "external_url": null
+            }
+        },
         "chapter": {
             "demoChapter1": {
                 "locator": null,
@@ -494,6 +511,32 @@
                                         "details": {},
                                         "body": {
                                             "boilerplate": "string_response.yaml"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "emptyVideo": {
+                        "locator": null,
+                        "details": {},
+                        "body": {
+                            "display_name": "Empty Video"
+                        },
+                        "vertical": {
+                            "emptyVideo": {
+                                "locator": null,
+                                "details": {},
+                                "body": {
+                                    "display_name": "Empty Video"
+                                },
+                                "problem": {
+                                    "emptyVideo": {
+                                        "locator": null,
+                                        "details": {},
+                                        "body": {
+                                            "category": "video",
+                                            "type":	"video"
                                         }
                                     }
                                 }

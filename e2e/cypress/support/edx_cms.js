@@ -60,11 +60,36 @@ class EdxCms extends HttpWrapper {
       course.locator = `block-v1:${org}+${number}+${run}+type@course+block@course`;
       course.courseId = `course-v1:${org}+${number}+${run}`;
       // eslint-disable-next-line no-await-in-loop
+      await this.uploadAssets(course);
+      // eslint-disable-next-line no-await-in-loop
       await this.createXblocks(course.chapter, this.categories, course.locator);
       // eslint-disable-next-line no-await-in-loop
       await this.publishXBlock(course.locator);
       // eslint-disable-next-line no-await-in-loop
       await this.configureCourse(course);
+    }
+  };
+
+  uploadAssets = async (course) => {
+    const headers = {
+      ...this.commonOptions.headers,
+      "Content-Type": "multipart/form-data",
+    };
+    // eslint-disable-next-line no-restricted-syntax
+    for (const asset of Object.values(course.assets)) {
+      const options = { path: `/assets/${course.courseId}/`, headers };
+      const payload = {
+        file: {
+          value: fs.readFileSync(`data/${asset.body.filename}`),
+          options: asset.body,
+        },
+      };
+      const callback = (data) => JSON.parse(data).asset;
+      Object.assign(
+        asset,
+        // eslint-disable-next-line no-await-in-loop
+        await this.promiseRequest(options, callback, payload)
+      );
     }
   };
 
