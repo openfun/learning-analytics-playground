@@ -13,6 +13,7 @@ COMPOSE          = \
     -f docker-compose.cypress.yml \
     -f docker-compose.edx.yml \
     -f docker-compose.keycloak.yml \
+    -f docker-compose.utils.yml \
     -f docker-compose.yml
 COMPOSE_RUN      = $(COMPOSE) run --rm -e HOME="/tmp"
 WAIT_DB          = $(COMPOSE_RUN) dockerize -wait tcp://edx_mysql:3306 -timeout 60s
@@ -46,6 +47,12 @@ data/edx/media/.keep:
 data/edx/store/.keep:
 	mkdir -p data/edx/store
 	touch data/edx/store/.keep
+
+e2e/data/video.mp4:
+	mkdir -p e2e/data
+	$(COMPOSE_RUN) ffmpeg -y -f lavfi -i testsrc=size=1920x1080:rate=1 -vf hue=s=0 \
+		-vcodec libx264 -preset superfast -tune zerolatency -pix_fmt yuv420p -t 5 \
+		-movflags +faststart "/e2e/data/video.mp4"
 
 # Make commands
 
@@ -144,6 +151,7 @@ down:  ## stop and remove docker containers
 .PHONY: down
 
 test: \
+	e2e/data/video.mp4 \
 	remove-edx-courses
 test: ## run tests
 	$(COMPOSE_RUN) cypress run --config-file false

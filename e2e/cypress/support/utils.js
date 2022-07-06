@@ -2,6 +2,8 @@
 const http = require("http");
 
 class HttpWrapper {
+  boundary = null;
+
   static isUrlEncoded(options) {
     const contentType = options.headers["Content-Type"];
     return (
@@ -9,9 +11,46 @@ class HttpWrapper {
     );
   }
 
+  static isFormDataEncoded(options) {
+    const contentType = options.headers["Content-Type"];
+    return contentType && contentType.includes("multipart/form-data");
+  }
+
   static urlEncode(payload) {
     // eslint-disable-next-line compat/compat
     return new URLSearchParams(payload).toString();
+  }
+
+  static getBoundary() {
+    if (this.boundary) {
+      return this.boundary;
+    }
+    // generates a 56 character boundary
+    let boundary = "---------------------------";
+    for (let i = 0; i < 29; i++) {
+      boundary += Math.floor(Math.random() * 10).toString(16);
+    }
+    this.boundary = boundary;
+    return boundary;
+  }
+
+  static formEncode(payload) {
+    let content = [];
+    Object.keys(payload).forEach((key) => {
+      const { contentType, filename } = payload[key].options;
+      content = content.concat([
+        Buffer.from(`--${this.getBoundary()}\r\n`, "utf8"),
+        Buffer.from(
+          `Content-Disposition: form-data; name="${key}"; filename="${filename}"\r\n`,
+          "utf8"
+        ),
+        Buffer.from(`Content-Type: ${contentType}\r\n\r\n`, "utf8"),
+        payload[key].value,
+        Buffer.from(`\r\n--${this.getBoundary()}`, "utf8"),
+      ]);
+    });
+    content = content.concat(Buffer.from("--\r\n", "utf8"));
+    return Buffer.concat(content);
   }
 
   static jsonEncode(payload) {
@@ -24,9 +63,16 @@ class HttpWrapper {
     if (!payload) {
       return null;
     }
-    const encoded = HttpWrapper.isUrlEncoded(options)
-      ? this.urlEncode(payload)
-      : this.jsonEncode(payload);
+    let encoded = null;
+    if (this.isUrlEncoded(options)) {
+      encoded = this.urlEncode(payload);
+    } else if (this.isFormDataEncoded(options)) {
+      encoded = this.formEncode(payload);
+      const contentType = `multipart/form-data; boundary=${this.getBoundary()}`;
+      options.headers["Content-Type"] = contentType;
+    } else {
+      encoded = this.jsonEncode(payload);
+    }
     options.headers["Content-Length"] = encoded.length;
     return encoded;
   }
@@ -74,6 +120,10 @@ const isSubset = (superObj, subObj) => {
   });
 };
 
+const getAssets = (courseName = "demoCourse1") => {
+  return Cypress.env("EDX_COURSES")[courseName].assets;
+};
+
 const getProblem = (section, problemName, unitName = null) => {
   unitName = unitName || problemName;
   return section.vertical[unitName].problem[problemName];
@@ -100,6 +150,7 @@ const getXblockId = (xBlock) => {
 
 module.exports.HttpWrapper = HttpWrapper;
 module.exports.isSubset = isSubset;
+module.exports.getAssets = getAssets;
 module.exports.getSectionAndURL = getSectionAndURL;
 module.exports.getProblem = getProblem;
 module.exports.getXblockId = getXblockId;
