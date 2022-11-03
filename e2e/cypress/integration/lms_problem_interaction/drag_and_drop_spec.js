@@ -23,6 +23,15 @@ describe("LMS Drag And Drop Problem Interaction Test", () => {
   before(() => {
     cy.lmsLoginStudent();
     cy.lmsEnroll(true);
+    // Reset Problem
+    const { courseId } = Cypress.env("EDX_COURSES").demoCourse1;
+    const handlerURL = "handler/xmodule_handler/problem_reset";
+    const url = `/courses/${courseId}/xblock/${problem.locator}/${handlerURL}`;
+    const method = "POST";
+    const body = { id: problem.locator };
+    cy.request({ url, method, body }).then((response) => {
+      expect(response.status).to.equal(200);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input answers (first image).
