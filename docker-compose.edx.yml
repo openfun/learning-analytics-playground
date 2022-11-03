@@ -37,11 +37,14 @@ services:
       DJANGO_SETTINGS_MODULE: lms.envs.fun.docker_run
     ports:
       - "8072:8000"
+      - "3001:3000"
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
       - ./data/edx/media:/edx/var/edxapp/media
       - ./data/edx/store:/edx/app/edxapp/data
       - ./edx/config:/config
+      - edx_src:/edx/app/edxapp/edx-platform
+      - edx_modules:/usr/local/src
       - ./docker/files/usr/local/bin/auth_init:/usr/local/bin/auth_init
     command: >
       python manage.py lms runserver 0.0.0.0:8000
@@ -81,3 +84,18 @@ services:
 networks:
   potsie:
     external: true
+
+volumes:
+  edx_src:
+    driver: local
+    driver_opts:
+      type: volume
+      o: bind
+      device: ./edx/src
+
+  edx_modules:
+    driver: local
+    driver_opts:
+      type: volume
+      o: bind
+      device: ./edx/modules

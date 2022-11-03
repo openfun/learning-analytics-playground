@@ -19,5 +19,9 @@ e2e/edx_courses_config.json
 # JS dependencies
 node_modules
 
+# EdX src and modules
+edx/src
+edx/modules/
+
 # logs
 yarn-error.log

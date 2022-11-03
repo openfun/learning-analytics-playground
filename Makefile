@@ -53,10 +53,18 @@ e2e/data/video.mp4:  ## generate a 5 second long video and put it in e2e/data di
 		-vcodec libx264 -preset superfast -tune zerolatency -pix_fmt yuv420p -t 5 \
 		-movflags +faststart "/e2e/data/video.mp4"
 
+edx/src:  ## directory to mount named bind volume for the edX-platform sources
+	mkdir -p edx/src
+
+edx/modules:  ## directory to mound named bind volume for the edX python modules
+	mkdir -p edx/modules
+
 # Make commands
 
 bootstrap: ## bootstrap the project
 bootstrap: \
+	edx/src \
+	edx/modules \
 	migrate \
 	run \
 	realm
