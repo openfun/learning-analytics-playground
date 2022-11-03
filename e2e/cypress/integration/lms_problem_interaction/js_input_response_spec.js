@@ -12,8 +12,11 @@ describe("LMS JS Input Response Problem Interaction Test", () => {
     cy.lmsEnroll(true);
     // Navigate to the courseware.
     cy.visit(sectionUrl);
+    // Wait for iframe to become interactive.
+    cy.wait(1500);
     // Input wrong answers.
     cy.get(`#iframe_${problemId}_2_1`).click(118, 200);
+    cy.wait(200);
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
