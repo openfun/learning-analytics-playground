@@ -78,7 +78,8 @@ jobs:
 
   test-e2e:
     machine:
-      image: ubuntu-2004:202201-02
+      image: ubuntu-2004:2022.10.1
+      docker_layer_caching: true
     working_directory: ~/fun
     steps:
       - checkout
@@ -87,10 +88,10 @@ jobs:
           command: docker network create potsie
       - run:
           name: Bootstrap project
-          command: make bootstrap
+          command: make bootstrap run-edx
       - run:
           name: Run e2e tests
-          command: make run-edx test
+          command: make test
 
   lint-test:
     docker:
