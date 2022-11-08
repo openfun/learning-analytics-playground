@@ -129,6 +129,10 @@ const getProblem = (section, problemName, unitName = null) => {
   return section.vertical[unitName].problem[problemName];
 };
 
+const getXblockId = (xBlock) => {
+  return xBlock.locator.slice(-32);
+};
+
 const getSectionAndURL = (
   sectionName,
   chapterName = "demoChapter1",
@@ -142,10 +146,6 @@ const getSectionAndURL = (
   const sectionId = getXblockId(section);
   const sectionUrl = `/courses/${courseId}/courseware/${chapterId}/${sectionId}/`;
   return [section, sectionUrl];
-};
-
-const getXblockId = (xBlock) => {
-  return xBlock.locator.slice(-32);
 };
 
 module.exports.HttpWrapper = HttpWrapper;

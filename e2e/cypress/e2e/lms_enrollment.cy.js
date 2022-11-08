@@ -70,7 +70,7 @@ describe("LMS Change Enrollment Test", () => {
     // Remove verified enrollment mode from the admin panel.
     cy.lmsLoginAdmin();
     cy.visit(`/admin/course_modes/coursemode/`);
-    cy.get("#action-toggle").check("on");
+    cy.get("#action-toggle").check();
     cy.get("#changelist-form select").select("delete_selected");
     cy.get("#changelist-form button").click();
     cy.get("form div input:last-of-type").click();

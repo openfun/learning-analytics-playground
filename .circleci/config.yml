@@ -95,7 +95,7 @@ jobs:
 
   lint-test:
     docker:
-      - image: circleci/node:14
+      - image: circleci/node:16
         auth:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD

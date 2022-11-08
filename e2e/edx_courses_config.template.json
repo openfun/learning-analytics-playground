@@ -1,550 +1,550 @@
 {
-    "demoCourse1": {
-        "locator": null,
-        "courseId": null,
+  "demoCourse1": {
+    "locator": null,
+    "courseId": null,
+    "body": {
+      "display_name": "Demo Course",
+      "org": "org",
+      "number": "number",
+      "run": "session"
+    },
+    "details": {
+      "language": "en",
+      "start_date": "2019-01-01T00:00:00.000Z",
+      "end_date": "2030-01-01T00:00:00.000Z",
+      "enrollment_start": "2020-01-01T00:00:00.000Z",
+      "enrollment_end": "2030-01-01T00:00:00.000Z",
+      "syllabus": null,
+      "short_description": "A first demo course",
+      "overview": "<section class=\"about\"><h2>About This Demo Course</h2></section>\n",
+      "intro_video": null,
+      "effort": null,
+      "license": null,
+      "course_image_name": null,
+      "course_image_asset_path": null,
+      "pre_requisite_courses": [],
+      "entrance_exam_enabled": "",
+      "entrance_exam_minimum_score_pct": "50",
+      "entrance_exam_id": "",
+      "self_paced": false
+    },
+    "assets": {
+      "video": {
         "body": {
-            "display_name": "Demo Course",
-            "org": "org",
-            "number": "number",
-            "run": "session"
+          "contentType": "video/mp4",
+          "filename": "video.mp4"
         },
-        "details": {
-            "language": "en",
-            "start_date": "2019-01-01T00:00:00.000Z",
-            "end_date": "2030-01-01T00:00:00.000Z",
-            "enrollment_start": "2020-01-01T00:00:00.000Z",
-            "enrollment_end": "2030-01-01T00:00:00.000Z",
-            "syllabus": null,
-            "short_description": "A first demo course",
-            "overview": "<section class=\"about\"><h2>About This Demo Course</h2></section>\n",
-            "intro_video": null,
-            "effort": null,
-            "license": null,
-            "course_image_name": null,
-            "course_image_asset_path": null,
-            "pre_requisite_courses": [],
-            "entrance_exam_enabled": "",
-            "entrance_exam_minimum_score_pct": "50",
-            "entrance_exam_id": "",
-            "self_paced": false
+        "display_name": null,
+        "content_type": null,
+        "url": null,
+        "date_added": null,
+        "id": null,
+        "portable_url": null,
+        "thumbnail": null,
+        "locked": null,
+        "external_url": null
+      }
+    },
+    "chapter": {
+      "demoChapter1": {
+        "locator": null,
+        "details": {},
+        "body": {
+          "display_name": "All Problems Chapter"
         },
-        "assets": {
-            "video": {
-                "body": {
-                    "contentType": "video/mp4",
-                    "filename": "video.mp4"
-                },
-                "display_name": null,
-                "content_type": null,
-                "url": null,
-                "date_added": null,
-                "id": null,
-                "portable_url": null,
-                "thumbnail": null,
-                "locked": null,
-                "external_url": null
-            }
-        },
-        "chapter": {
-            "demoChapter1": {
+        "sequential": {
+          "checkboxesResponseHint": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Checkboxes Response Hint"
+            },
+            "vertical": {
+              "checkboxesResponseHint": {
                 "locator": null,
                 "details": {},
                 "body": {
-                    "display_name": "All Problems Chapter"
+                  "display_name": "Checkboxes Response Hint"
                 },
-                "sequential": {
-                    "checkboxesResponseHint": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Checkboxes Response Hint"
-                        },
-                        "vertical": {
-                            "checkboxesResponseHint": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Checkboxes Response Hint"
-                                },
-                                "problem": {
-                                    "checkboxesResponseHint": {
-                                        "locator": null,
-                                        "details": {
-                                            "metadata": {
-                                                "show_reset_button": true
-                                            }
-                                        },
-                                        "body": {
-                                            "boilerplate": "checkboxes_response_hint.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                "problem": {
+                  "checkboxesResponseHint": {
+                    "locator": null,
+                    "details": {
+                      "metadata": {
+                        "show_reset_button": true
+                      }
                     },
-                    "checkboxesResponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Checkboxes Response"
-                        },
-                        "vertical": {
-                            "checkboxesResponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Checkboxes Response"
-                                },
-                                "problem": {
-                                    "checkboxesResponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "checkboxes_response.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "circuitschematic": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Circuit Schematic"
-                        },
-                        "vertical": {
-                            "circuitschematic": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Circuit Schematic"
-                                },
-                                "problem": {
-                                    "circuitschematic": {
-                                        "locator": null,
-                                        "details": {
-                                            "data": "<problem>\n  <p>Make a voltage divider that splits the provided voltage evenly.</p>\n  <schematicresponse>\n  <center>\n    <schematic height=\"500\" width=\"600\" parts=\"g,r\" analyses=\"dc\"\n    initial_value=\"[[&quot;v&quot;,[168,144,0],{&quot;value&quot;:&quot;dc(1)&quot;,&quot;_json_&quot;:0},[&quot;1&quot;,&quot;0&quot;]],[&quot;r&quot;,[296,120,0],{&quot;r&quot;:&quot;1&quot;,&quot;_json_&quot;:1},[&quot;1&quot;,&quot;output&quot;]],[&quot;L&quot;,[296,168,3],{&quot;label&quot;:&quot;output&quot;,&quot;_json_&quot;:2},[&quot;output&quot;]],[&quot;w&quot;,[296,216,168,216]],[&quot;w&quot;,[168,216,168,192]],[&quot;w&quot;,[168,144,168,120]],[&quot;w&quot;,[168,120,296,120]],[&quot;g&quot;,[168,216,0],{&quot;_json_&quot;:7},[&quot;0&quot;]],[&quot;view&quot;,-67.49999999999994,-78.49999999999994,1.6000000000000003,&quot;50&quot;,&quot;10&quot;,&quot;1G&quot;,null,&quot;100&quot;,&quot;1&quot;,&quot;1000&quot;]]\"/>\n  </center>\n<answer type=\"loncapa/python\">\ndc_value = \"dc analysis not found\"\nfor response in submission[0]:\n  if response[0] == 'dc':\n      for node in response[1:]:\n          dc_value = node['output']\n\nif dc_value == .5:\n  correct = ['correct']\nelse:\n  correct = ['incorrect']\n</answer>\n</schematicresponse>\n</problem>\n"
-                                        },
-                                        "body": {
-                                            "boilerplate": "circuitschematic.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "customgrader": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Custom Grader"
-                        },
-                        "vertical": {
-                            "customgrader": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Custom Grader"
-                                },
-                                "problem": {
-                                    "customgrader": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "customgrader.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "dragAndDrop": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Drag And Drop"
-                        },
-                        "vertical": {
-                            "dragAndDrop": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Drag And Drop"
-                                },
-                                "problem": {
-                                    "dragAndDrop": {
-                                        "locator": null,
-                                        "details": {
-                                            "metadata": {
-                                                "show_reset_button": true
-                                            }
-                                        },
-                                        "body": {
-                                            "boilerplate": "drag_and_drop.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "formularesponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Formula Response"
-                        },
-                        "vertical": {
-                            "formularesponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Formula Response"
-                                },
-                                "problem": {
-                                    "formularesponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "formularesponse.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "imageResponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Image Response"
-                        },
-                        "vertical": {
-                            "imageResponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Image Response"
-                                },
-                                "problem": {
-                                    "imageResponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "imageresponse.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "jsinputResponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "JS Input Response"
-                        },
-                        "vertical": {
-                            "jsinputResponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "JS Input Response"
-                                },
-                                "problem": {
-                                    "jsinputResponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "jsinput_response.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "latexProblem": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "LaTeX Problem"
-                        },
-                        "vertical": {
-                            "latexProblem": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "LaTeX Problem"
-                                },
-                                "problem": {
-                                    "latexProblem": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "latex_problem.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "multiplechoiceHint": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Multiple Choice Hint"
-                        },
-                        "vertical": {
-                            "multiplechoiceHint": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Multiple Choice Hint"
-                                },
-                                "problem": {
-                                    "multiplechoiceHint": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "multiplechoice_hint.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "multiplechoice": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Multiple Choice"
-                        },
-                        "vertical": {
-                            "multiplechoice": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Multiple Choice"
-                                },
-                                "problem": {
-                                    "multiplechoice": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "multiplechoice.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "numericalresponseHint": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Numerical Response Hint"
-                        },
-                        "vertical": {
-                            "numericalresponseHint": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Numerical Response Hint"
-                                },
-                                "problem": {
-                                    "numericalresponseHint": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "numericalresponse_hint.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "numericalresponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Numerical Response"
-                        },
-                        "vertical": {
-                            "numericalresponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Numerical Response"
-                                },
-                                "problem": {
-                                    "numericalresponse": {
-                                        "locator": null,
-                                        "body": {
-                                            "boilerplate": "numericalresponse.yaml"
-                                        },
-                                        "details": {
-                                            "metadata": {
-                                                "showanswer": "always"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "optionresponseHint": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Option Response Hint"
-                        },
-                        "vertical": {
-                            "optionresponseHint": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Option Response Hint"
-                                },
-                                "problem": {
-                                    "optionresponseHint": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "optionresponse_hint.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "optionresponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Option Response"
-                        },
-                        "vertical": {
-                            "optionresponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Option Response"
-                                },
-                                "problem": {
-                                    "optionresponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "optionresponse.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "problemWithHintInLatex": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Problem With Hint In Latex"
-                        },
-                        "vertical": {
-                            "problemWithHintInLatex": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Problem With Hint In Latex"
-                                },
-                                "problem": {
-                                    "problemWithHintInLatex": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "problem_with_hint_in_latex.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "stringResponseHint": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "String Response Hint"
-                        },
-                        "vertical": {
-                            "stringResponseHint": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "String Response Hint"
-                                },
-                                "problem": {
-                                    "stringResponseHint": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "string_response_hint.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "stringResponse": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "String Response"
-                        },
-                        "vertical": {
-                            "stringResponse": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "String Response"
-                                },
-                                "problem": {
-                                    "stringResponse": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "boilerplate": "string_response.yaml"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "emptyVideo": {
-                        "locator": null,
-                        "details": {},
-                        "body": {
-                            "display_name": "Empty Video"
-                        },
-                        "vertical": {
-                            "emptyVideo": {
-                                "locator": null,
-                                "details": {},
-                                "body": {
-                                    "display_name": "Empty Video"
-                                },
-                                "problem": {
-                                    "emptyVideo": {
-                                        "locator": null,
-                                        "details": {},
-                                        "body": {
-                                            "category": "video",
-                                            "type":	"video"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                    "body": {
+                      "boilerplate": "checkboxes_response_hint.yaml"
                     }
+                  }
                 }
+              }
             }
+          },
+          "checkboxesResponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Checkboxes Response"
+            },
+            "vertical": {
+              "checkboxesResponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Checkboxes Response"
+                },
+                "problem": {
+                  "checkboxesResponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "checkboxes_response.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "circuitschematic": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Circuit Schematic"
+            },
+            "vertical": {
+              "circuitschematic": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Circuit Schematic"
+                },
+                "problem": {
+                  "circuitschematic": {
+                    "locator": null,
+                    "details": {
+                      "data": "<problem>\n  <p>Make a voltage divider that splits the provided voltage evenly.</p>\n  <schematicresponse>\n  <center>\n    <schematic height=\"500\" width=\"600\" parts=\"g,r\" analyses=\"dc\"\n    initial_value=\"[[&quot;v&quot;,[168,144,0],{&quot;value&quot;:&quot;dc(1)&quot;,&quot;_json_&quot;:0},[&quot;1&quot;,&quot;0&quot;]],[&quot;r&quot;,[296,120,0],{&quot;r&quot;:&quot;1&quot;,&quot;_json_&quot;:1},[&quot;1&quot;,&quot;output&quot;]],[&quot;L&quot;,[296,168,3],{&quot;label&quot;:&quot;output&quot;,&quot;_json_&quot;:2},[&quot;output&quot;]],[&quot;w&quot;,[296,216,168,216]],[&quot;w&quot;,[168,216,168,192]],[&quot;w&quot;,[168,144,168,120]],[&quot;w&quot;,[168,120,296,120]],[&quot;g&quot;,[168,216,0],{&quot;_json_&quot;:7},[&quot;0&quot;]],[&quot;view&quot;,-67.49999999999994,-78.49999999999994,1.6000000000000003,&quot;50&quot;,&quot;10&quot;,&quot;1G&quot;,null,&quot;100&quot;,&quot;1&quot;,&quot;1000&quot;]]\"/>\n  </center>\n<answer type=\"loncapa/python\">\ndc_value = \"dc analysis not found\"\nfor response in submission[0]:\n  if response[0] == 'dc':\n      for node in response[1:]:\n          dc_value = node['output']\n\nif dc_value == .5:\n  correct = ['correct']\nelse:\n  correct = ['incorrect']\n</answer>\n</schematicresponse>\n</problem>\n"
+                    },
+                    "body": {
+                      "boilerplate": "circuitschematic.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "customgrader": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Custom Grader"
+            },
+            "vertical": {
+              "customgrader": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Custom Grader"
+                },
+                "problem": {
+                  "customgrader": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "customgrader.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "dragAndDrop": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Drag And Drop"
+            },
+            "vertical": {
+              "dragAndDrop": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Drag And Drop"
+                },
+                "problem": {
+                  "dragAndDrop": {
+                    "locator": null,
+                    "details": {
+                      "metadata": {
+                        "show_reset_button": true
+                      }
+                    },
+                    "body": {
+                      "boilerplate": "drag_and_drop.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "formularesponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Formula Response"
+            },
+            "vertical": {
+              "formularesponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Formula Response"
+                },
+                "problem": {
+                  "formularesponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "formularesponse.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "imageResponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Image Response"
+            },
+            "vertical": {
+              "imageResponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Image Response"
+                },
+                "problem": {
+                  "imageResponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "imageresponse.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "jsinputResponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "JS Input Response"
+            },
+            "vertical": {
+              "jsinputResponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "JS Input Response"
+                },
+                "problem": {
+                  "jsinputResponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "jsinput_response.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "latexProblem": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "LaTeX Problem"
+            },
+            "vertical": {
+              "latexProblem": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "LaTeX Problem"
+                },
+                "problem": {
+                  "latexProblem": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "latex_problem.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "multiplechoiceHint": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Multiple Choice Hint"
+            },
+            "vertical": {
+              "multiplechoiceHint": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Multiple Choice Hint"
+                },
+                "problem": {
+                  "multiplechoiceHint": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "multiplechoice_hint.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "multiplechoice": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Multiple Choice"
+            },
+            "vertical": {
+              "multiplechoice": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Multiple Choice"
+                },
+                "problem": {
+                  "multiplechoice": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "multiplechoice.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "numericalresponseHint": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Numerical Response Hint"
+            },
+            "vertical": {
+              "numericalresponseHint": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Numerical Response Hint"
+                },
+                "problem": {
+                  "numericalresponseHint": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "numericalresponse_hint.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "numericalresponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Numerical Response"
+            },
+            "vertical": {
+              "numericalresponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Numerical Response"
+                },
+                "problem": {
+                  "numericalresponse": {
+                    "locator": null,
+                    "body": {
+                      "boilerplate": "numericalresponse.yaml"
+                    },
+                    "details": {
+                      "metadata": {
+                        "showanswer": "always"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "optionresponseHint": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Option Response Hint"
+            },
+            "vertical": {
+              "optionresponseHint": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Option Response Hint"
+                },
+                "problem": {
+                  "optionresponseHint": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "optionresponse_hint.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "optionresponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Option Response"
+            },
+            "vertical": {
+              "optionresponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Option Response"
+                },
+                "problem": {
+                  "optionresponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "optionresponse.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "problemWithHintInLatex": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Problem With Hint In Latex"
+            },
+            "vertical": {
+              "problemWithHintInLatex": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Problem With Hint In Latex"
+                },
+                "problem": {
+                  "problemWithHintInLatex": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "problem_with_hint_in_latex.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "stringResponseHint": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "String Response Hint"
+            },
+            "vertical": {
+              "stringResponseHint": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "String Response Hint"
+                },
+                "problem": {
+                  "stringResponseHint": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "string_response_hint.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "stringResponse": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "String Response"
+            },
+            "vertical": {
+              "stringResponse": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "String Response"
+                },
+                "problem": {
+                  "stringResponse": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "boilerplate": "string_response.yaml"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "emptyVideo": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Empty Video"
+            },
+            "vertical": {
+              "emptyVideo": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Empty Video"
+                },
+                "problem": {
+                  "emptyVideo": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "video",
+                      "type": "video"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
+      }
     }
+  }
 }

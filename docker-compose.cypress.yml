@@ -1,17 +1,20 @@
 version: "3.2"
 services:
   cypress:
-    image: "cypress/included:8.3.0"
+    image: "cypress/included:10.11.0"
     entrypoint: cypress
     env_file:
       - env.d/cypress
+    environment:
+      - DISPLAY=${DISPLAY}
     working_dir: /e2e
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
       - ./e2e:/e2e
+      - /tmp/.X11-unix:/tmp/.X11-unix
 
   node:
-    image: circleci/node:14
+    image: circleci/node:16
     working_dir: /app
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:

@@ -153,7 +153,7 @@ test: \
 	e2e/data/video.mp4 \
 	remove-edx-courses
 test: ## run tests
-	$(COMPOSE_RUN) cypress run --config-file false
+	$(COMPOSE_RUN) cypress run
 .PHONY: test
 
 tree: \
