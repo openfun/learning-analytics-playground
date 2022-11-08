@@ -112,6 +112,9 @@ class HttpWrapper {
 
 // From https://stackoverflow.com/a/61676007
 const isSubset = (superObj, subObj) => {
+  if (subObj === null) {
+    return subObj === superObj;
+  }
   return Object.keys(subObj).every((ele) => {
     if (typeof subObj[ele] === "object" && typeof superObj[ele] === "object") {
       return isSubset(superObj[ele], subObj[ele]);

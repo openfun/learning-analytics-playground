@@ -1386,7 +1386,7 @@ THUMBNAIL_PRESERVE_EXTENSIONS = True
 THUMBNAIL_EXTENSION = "png"
 
 ##### ORA2 ######
-ORA2_FILEUPLOAD_BACKEND = "swift"
+ORA2_FILEUPLOAD_BACKEND = "filesystem"
 ORA2_SWIFT_KEY = config("ORA2_SWIFT_KEY", default="")
 ORA2_SWIFT_URL = config("ORA2_SWIFT_URL", default="")
 
@@ -1554,11 +1554,8 @@ ALLOWED_HOSTS = ["*"]
 FEATURES["AUTOMATIC_AUTH_FOR_TESTING"] = True
 
 # ORA2 fileupload
-ORA2_FILEUPLOAD_BACKEND = "filesystem"
 ORA2_FILEUPLOAD_ROOT = os.path.join(SHARED_ROOT, "openassessment_submissions")
-ORA2_FILEUPLOAD_CACHE_ROOT = os.path.join(
-    SHARED_ROOT, "openassessment_submissions_cache"
-)
+ORA2_FILEUPLOAD_CACHE_NAME = "openassessment_submissions"
 
 AUTHENTICATION_BACKENDS = config(
     "AUTHENTICATION_BACKENDS",

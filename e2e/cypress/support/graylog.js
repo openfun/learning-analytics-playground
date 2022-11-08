@@ -18,6 +18,7 @@ class Graylog extends HttpWrapper {
     };
     this.title = env.GRAYLOG_TEST_INPUT_TITLE;
     this.searchId = env.GRAYLOG_TEST_SEARCH_ID;
+    this.searchLimit = env.GRAYLOG_TEXT_SEARCH_LIMIT;
     this.searchTypeId = env.GRAYLOG_TEST_SEARCH_TYPE_ID;
     this.searchRange = env.GRAYLOG_TEST_SEARCH_RANGE_IN_SECONDS;
   }
@@ -54,6 +55,7 @@ class Graylog extends HttpWrapper {
               id: this.searchTypeId,
               sort: [{ field: "timestamp", order: "DESC" }],
               type: "messages",
+              limit: this.searchLimit,
             },
           ],
         },

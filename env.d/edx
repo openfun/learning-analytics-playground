@@ -39,4 +39,4 @@ CORS_ORIGIN_ALLOW_ALL=true
 # EDX_API_KEY=FakeEdXAPIKey
 
 # LMS
-LMS_BASE=localhost:8072
+LMS_BASE=edx_lms:8000

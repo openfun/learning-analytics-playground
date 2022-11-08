@@ -41,6 +41,7 @@ services:
     volumes:
       - ./data/edx/media:/edx/var/edxapp/media
       - ./data/edx/store:/edx/app/edxapp/data
+      - ./data/edx/openassessment_submissions:/edx/app/edxapp/data/shared/openassessment_submissions
       - ./edx/config:/config
       - ./docker/files/usr/local/bin/auth_init:/usr/local/bin/auth_init
     command: >

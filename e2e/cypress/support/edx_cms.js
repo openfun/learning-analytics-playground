@@ -113,9 +113,7 @@ class EdxCms extends HttpWrapper {
   };
 
   configureXBlock = async (xBlock) => {
-    if (!xBlock.details || Object.keys(xBlock.details).length === 0) {
-      return;
-    }
+    await this.configureOra2XBlock(xBlock);
     const options = {
       path: `/xblock/${encodeURIComponent(xBlock.locator)}`,
       method: "GET",
@@ -124,7 +122,22 @@ class EdxCms extends HttpWrapper {
     const details = await this.promiseRequest(options, callback);
     options.method = "POST";
     const payload = { ...details, ...xBlock.details };
-    xBlock.details = await this.promiseRequest(options, callback, payload);
+    xBlock.details = {
+      ...details,
+      ...(await this.promiseRequest(options, callback, payload)),
+    };
+  };
+
+  configureOra2XBlock = async (xBlock) => {
+    if (!xBlock.updateEditorContext) {
+      return;
+    }
+    const handler = "handler/update_editor_context";
+    const options = {
+      path: `/xblock/${encodeURIComponent(xBlock.locator)}/${handler}`,
+      method: "POST",
+    };
+    await this.promiseRequest(options, null, xBlock.updateEditorContext);
   };
 
   publishXBlock = async (locator) => {
