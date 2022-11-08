@@ -8,8 +8,10 @@ describe("LMS Multiple Choice With Hint Problem Interaction Test", () => {
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input wrong answer.
@@ -30,7 +32,6 @@ describe("LMS Multiple Choice With Hint Problem Interaction Test", () => {
     // Ask for a second hint.
     cy.get(".hint-button").click();
     cy.get(".problem-hint").should("contain", "Indice (2 sur 2) :");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

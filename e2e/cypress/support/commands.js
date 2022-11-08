@@ -46,6 +46,35 @@ const cmsLogin = (email, password) =>
 
 const lmsLogin = (email, password) => login(email, password, "/login_ajax");
 
+const lmsCreateUser = (username, password) => {
+  const url = "/create_account";
+  const method = "POST";
+  const form = true;
+  username = username || utils.uuid4().replaceAll("-", "").slice(2);
+  password = password || "Password1";
+  const email = `${username}@fun-mooc.fr`;
+  const body = {
+    username,
+    password,
+    email,
+    name: "John Doe",
+    country: "FR",
+    city: "Paris",
+    gender: "o",
+    year_of_birth: `${new Date().getFullYear()}`,
+    level_of_education: "p",
+    goals: "motivation",
+    terms_of_service: "true",
+    honor_code: "true",
+  };
+  cy.task("log", `creating user: '${email}' with password: '${password}'`);
+  return cy.request({ url, method, form, body }).then((response) => {
+    expect(response.status).to.equal(200);
+    return { email, password };
+  });
+};
+
+Cypress.Commands.add("lmsCreateUser", lmsCreateUser);
 Cypress.Commands.add("cmsLogin", cmsLogin);
 Cypress.Commands.add("lmsLogin", lmsLogin);
 Cypress.Commands.add("cmsLoginAdmin", () => cmsLogin(adminEmail, adminPass));

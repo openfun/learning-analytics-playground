@@ -8,8 +8,10 @@ describe("LMS Option Response With Hint Problem Interaction Test", () => {
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Ask for a first hint.
@@ -23,14 +25,13 @@ describe("LMS Option Response With Hint Problem Interaction Test", () => {
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
-    cy.get(`.hint-label`).should("contain", "Incorrect");
+    cy.get(".hint-label").should("contain", "Incorrect");
     // Input correct answers.
     cy.get(`#input_${problemId}_2_1`).select("potato");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
-    cy.get(`.hint-label`).should("contain", "Correct");
-    cy.lmsEnroll(false);
+    cy.get(".hint-label").should("contain", "Correct");
   });
 
   it("should log problem_check server event", () => {

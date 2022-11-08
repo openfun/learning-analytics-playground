@@ -8,8 +8,10 @@ describe("LMS Numerical Response With Hint Problem Interaction Test", () => {
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input wrong answers.
@@ -34,7 +36,6 @@ describe("LMS Numerical Response With Hint Problem Interaction Test", () => {
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
     cy.get(`#${problemId}_2_1_status`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

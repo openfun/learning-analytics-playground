@@ -15,8 +15,10 @@ describe("LMS JS Input Response Problem Interaction Test", () => {
   };
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Reset Problem
     const { courseId } = Cypress.env("EDX_COURSES").demoCourse1;
     const handlerURL = "handler/xmodule_handler/problem_reset";
@@ -58,7 +60,6 @@ describe("LMS JS Input Response Problem Interaction Test", () => {
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
     cy.get(`#status_${problemId}_2_1`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {
