@@ -22,14 +22,15 @@ describe("LMS Change Enrollment Test", () => {
   before(() => {
     const { courseId } = Cypress.env("EDX_COURSES").demoCourse1;
 
-    // Note: enrolling the student before adding a new enrollment mode
-    // avoids additional steps during enrollment.
     cy.lmsCreateUser().then(({ email, password }) => {
-      cy.lmsLogin(email, password);
-      cy.lmsEnroll(true);
-      cy.lmsLoginAdmin();
+      // Note: enrolling the student before adding a new enrollment mode
+      // avoids additional steps during enrollment.
+      cy.session("student", () => {
+        cy.lmsLogin(email, password).then(() => cy.lmsEnroll(true));
+      });
 
       // Add `verified` enrollment mode from the admin panel.
+      cy.session("admin", () => cy.lmsLoginAdmin());
       cy.visit("/admin/course_modes/coursemode/add/");
       cy.get("#id_course_id").type(courseId);
       cy.get("#id_mode_slug").select("verified");
@@ -59,7 +60,9 @@ describe("LMS Change Enrollment Test", () => {
 
       // Upgrade enrollment to verified mode.
       // Triggers edx.course.enrollment.upgrade.clicked
-      cy.lmsLogin(email, password);
+      cy.session("student", () => {
+        cy.lmsLogin(email, password).then(() => cy.lmsEnroll(true));
+      });
       cy.visit("/dashboard");
       cy.get("#upgrade-to-verified").click();
       cy.url().should("include", "/verify_student/upgrade/");
@@ -72,7 +75,7 @@ describe("LMS Change Enrollment Test", () => {
     });
 
     // Remove verified enrollment mode from the admin panel.
-    cy.lmsLoginAdmin();
+    cy.session("admin", () => cy.lmsLoginAdmin());
     cy.visit("/admin/course_modes/coursemode/");
     cy.get("#action-toggle").check();
     cy.get("#changelist-form select").select("delete_selected");

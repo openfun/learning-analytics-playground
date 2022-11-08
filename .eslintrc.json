@@ -6,6 +6,7 @@
         "es2021": true
     },
     "extends": [
+      "eslint:recommended",
       "airbnb-typescript",
       "plugin:compat/recommended",
       "plugin:cypress/recommended",
@@ -23,8 +24,10 @@
       "formatjs/no-multiple-whitespaces": "error",
       "formatjs/enforce-description": "error",
       "formatjs/enforce-default-message": "error",
+      "max-len": ["error", { "code": 120 }],
       "no-console": ["error", { "allow": ["warn"] }],
       "no-nested-ternary": "warn",
+      "no-undef": "off",
       "react/jsx-filename-extension": "off",
       "import/no-extraneous-dependencies": ["error", {"devDependencies": false}]
     },

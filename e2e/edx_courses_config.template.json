@@ -542,6 +542,498 @@
                 }
               }
             }
+          },
+          "defaultOpenAssessment": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Default Open Assessment"
+            },
+            "vertical": {
+              "defaultOpenAssessment": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Default Open Assessment"
+                },
+                "problem": {
+                  "defaultOpenAssessment": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "openassessment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "StudentTrainingDefaultOpenAssessment": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Default Student Training Open Assessment"
+            },
+            "vertical": {
+              "StudentTrainingDefaultOpenAssessment": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Default Student Training Open Assessment"
+                },
+                "problem": {
+                  "StudentTrainingDefaultOpenAssessment": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "openassessment"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "openAssessmentWithTwoTextPrompts": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Open Assessment With Two Text Prompts"
+            },
+            "vertical": {
+              "openAssessmentWithTwoTextPrompts": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Open Assessment With Two Text Prompts"
+                },
+                "problem": {
+                  "openAssessmentWithTwoTextPrompts": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "openassessment"
+                    },
+                    "updateEditorContext": {
+                      "prompts": [
+                        {
+                          "description": "Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. Do you believe that certain materials, such as books, music, movies, magazines, etc., should be removed from the shelves if they are found offensive? Support your position with convincing arguments from your own experience, observations, and/or reading.\n\n"
+                        },
+                        {
+                          "description": "Write an essay about your favorite meal."
+                        }
+                      ],
+                      "feedback_prompt": "(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?\n",
+                      "feedback_default_text": "I think that this response...\n",
+                      "title": "Open Response Assessment",
+                      "submission_start": "2001-01-01T00:00",
+                      "submission_due": "2029-01-01T00:00",
+                      "criteria": [
+                        {
+                          "label": "Ideas",
+                          "prompt": "Determine if there is a unifying theme or main idea.",
+                          "feedback": "optional",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Difficult for the reader to discern the main idea.  Too brief or too repetitive to establish or maintain a focus.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Fair",
+                              "points": 3,
+                              "explanation": "Presents a unifying theme or main idea, but may include minor tangents.  Stays somewhat focused on topic and task.",
+                              "name": "Fair",
+                              "order_num": 1
+                            },
+                            {
+                              "label": "Good",
+                              "points": 5,
+                              "explanation": "Presents a unifying theme or main idea without going off on tangents.  Stays completely focused on topic and task.",
+                              "name": "Good",
+                              "order_num": 2
+                            }
+                          ],
+                          "name": "Ideas",
+                          "order_num": 0
+                        },
+                        {
+                          "label": "Content",
+                          "prompt": "Assess the content of the submission",
+                          "feedback": "disabled",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Includes little information with few or no details or unrelated details.  Unsuccessful in attempts to explore any facets of the topic.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Fair",
+                              "points": 1,
+                              "explanation": "Includes little information and few or no details.  Explores only one or two facets of the topic.",
+                              "name": "Fair",
+                              "order_num": 1
+                            },
+                            {
+                              "label": "Good",
+                              "points": 3,
+                              "explanation": "Includes sufficient information and supporting details. (Details may not be fully developed; ideas may be listed.)  Explores some facets of the topic.",
+                              "name": "Good",
+                              "order_num": 2
+                            },
+                            {
+                              "label": "Excellent",
+                              "points": 3,
+                              "explanation": "Includes in-depth information and exceptional supporting details that are fully developed.  Explores all facets of the topic.",
+                              "name": "Excellent",
+                              "order_num": 3
+                            }
+                          ],
+                          "name": "Content",
+                          "order_num": 1
+                        }
+                      ],
+                      "assessments": [
+                        {
+                          "examples": [
+                            {
+                              "answer": [
+                                "Replace this text with your own sample response for this assignment. Then, under Response Score to the right, select an option for each criterion. Learners practice performing peer assessments by assessing this response and comparing the options that they select in the rubric with the options that you specified.",
+                                ""
+                              ],
+                              "options_selected": [
+                                {
+                                  "criterion": "Ideas",
+                                  "option": "Fair"
+                                },
+                                {
+                                  "criterion": "Content",
+                                  "option": "Good"
+                                }
+                              ]
+                            },
+                            {
+                              "answer": [
+                                "Replace this text with another sample response, and then specify the options that you would select for this response.",
+                                ""
+                              ],
+                              "options_selected": [
+                                {
+                                  "criterion": "Ideas",
+                                  "option": "Poor"
+                                },
+                                {
+                                  "criterion": "Content",
+                                  "option": "Good"
+                                }
+                              ]
+                            }
+                          ],
+                          "name": "student-training"
+                        },
+                        {
+                          "must_grade": 5,
+                          "must_be_graded_by": 3,
+                          "start": "2001-01-01T00:00",
+                          "due": "2029-01-01T00:00",
+                          "name": "peer-assessment"
+                        },
+                        {
+                          "start": "2001-01-01T00:00",
+                          "due": "2029-01-01T00:00",
+                          "name": "self-assessment"
+                        }
+                      ],
+                      "editor_assessments_order": [
+                        "student-training",
+                        "peer-assessment",
+                        "self-assessment",
+                        "staff-assessment"
+                      ],
+                      "text_response": "required",
+                      "file_upload_response": "",
+                      "file_upload_type": null,
+                      "white_listed_file_types": "",
+                      "allow_latex": false,
+                      "leaderboard_show": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "openAssessmentWithTwoTextPromptsAndOptionalFile": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Open Assessment With Two Text Prompts and Optional File"
+            },
+            "vertical": {
+              "openAssessmentWithTwoTextPromptsAndOptionalFile": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Open Assessment With Two Text Prompts and Optional File"
+                },
+                "problem": {
+                  "openAssessmentWithTwoTextPromptsAndOptionalFile": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "openassessment"
+                    },
+                    "updateEditorContext": {
+                      "prompts": [
+                        {
+                          "description": "Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. Do you believe that certain materials, such as books, music, movies, magazines, etc., should be removed from the shelves if they are found offensive? Support your position with convincing arguments from your own experience, observations, and/or reading.\n\n"
+                        },
+                        {
+                          "description": "Write an essay about your favorite meal."
+                        }
+                      ],
+                      "feedback_prompt": "(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?\n",
+                      "feedback_default_text": "I think that this response...\n",
+                      "title": "Open Response Assessment",
+                      "submission_start": "2001-01-01T00:00",
+                      "submission_due": "2029-01-01T00:00",
+                      "criteria": [
+                        {
+                          "label": "Ideas",
+                          "prompt": "Determine if there is a unifying theme or main idea.",
+                          "feedback": "optional",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Difficult for the reader to discern the main idea.  Too brief or too repetitive to establish or maintain a focus.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Fair",
+                              "points": 3,
+                              "explanation": "Presents a unifying theme or main idea, but may include minor tangents.  Stays somewhat focused on topic and task.",
+                              "name": "Fair",
+                              "order_num": 1
+                            },
+                            {
+                              "label": "Good",
+                              "points": 5,
+                              "explanation": "Presents a unifying theme or main idea without going off on tangents.  Stays completely focused on topic and task.",
+                              "name": "Good",
+                              "order_num": 2
+                            }
+                          ],
+                          "name": "Ideas",
+                          "order_num": 0
+                        },
+                        {
+                          "label": "Content",
+                          "prompt": "Assess the content of the submission",
+                          "feedback": "disabled",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Includes little information with few or no details or unrelated details.  Unsuccessful in attempts to explore any facets of the topic.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Fair",
+                              "points": 1,
+                              "explanation": "Includes little information and few or no details.  Explores only one or two facets of the topic.",
+                              "name": "Fair",
+                              "order_num": 1
+                            },
+                            {
+                              "label": "Good",
+                              "points": 3,
+                              "explanation": "Includes sufficient information and supporting details. (Details may not be fully developed; ideas may be listed.)  Explores some facets of the topic.",
+                              "name": "Good",
+                              "order_num": 2
+                            },
+                            {
+                              "label": "Excellent",
+                              "points": 3,
+                              "explanation": "Includes in-depth information and exceptional supporting details that are fully developed.  Explores all facets of the topic.",
+                              "name": "Excellent",
+                              "order_num": 3
+                            }
+                          ],
+                          "name": "Content",
+                          "order_num": 1
+                        }
+                      ],
+                      "assessments": [
+                        {
+                          "examples": [
+                            {
+                              "answer": [
+                                "Replace this text with your own sample response for this assignment. Then, under Response Score to the right, select an option for each criterion. Learners practice performing peer assessments by assessing this response and comparing the options that they select in the rubric with the options that you specified.",
+                                ""
+                              ],
+                              "options_selected": [
+                                {
+                                  "criterion": "Ideas",
+                                  "option": "Fair"
+                                },
+                                {
+                                  "criterion": "Content",
+                                  "option": "Good"
+                                }
+                              ]
+                            },
+                            {
+                              "answer": [
+                                "Replace this text with another sample response, and then specify the options that you would select for this response.",
+                                ""
+                              ],
+                              "options_selected": [
+                                {
+                                  "criterion": "Ideas",
+                                  "option": "Poor"
+                                },
+                                {
+                                  "criterion": "Content",
+                                  "option": "Good"
+                                }
+                              ]
+                            }
+                          ],
+                          "name": "student-training"
+                        },
+                        {
+                          "must_grade": 5,
+                          "must_be_graded_by": 3,
+                          "start": "2001-01-01T00:00",
+                          "due": "2029-01-01T00:00",
+                          "name": "peer-assessment"
+                        },
+                        {
+                          "start": "2001-01-01T00:00",
+                          "due": "2029-01-01T00:00",
+                          "name": "self-assessment"
+                        }
+                      ],
+                      "editor_assessments_order": [
+                        "student-training",
+                        "peer-assessment",
+                        "self-assessment",
+                        "staff-assessment"
+                      ],
+                      "text_response": "required",
+                      "file_upload_response": "optional",
+                      "file_upload_type": "pdf-and-image",
+                      "white_listed_file_types": "",
+                      "allow_latex": false,
+                      "leaderboard_show": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "openAssessmentWithStaffAssessment": {
+            "locator": null,
+            "details": {},
+            "body": {
+              "display_name": "Open Assessment With Staff Assessment"
+            },
+            "vertical": {
+              "openAssessmentWithStaffAssessment": {
+                "locator": null,
+                "details": {},
+                "body": {
+                  "display_name": "Open Assessment With Staff Assessment"
+                },
+                "problem": {
+                  "openAssessmentWithStaffAssessment": {
+                    "locator": null,
+                    "details": {},
+                    "body": {
+                      "category": "openassessment"
+                    },
+                    "updateEditorContext": {
+                      "prompts": [
+                        {
+                          "description": "    Censorship in the Libraries\n\n    'All of us can think of a book that we hope none of our children or any other children have taken off the shelf. But if I have the right to remove that book from the shelf -- that work I abhor -- then you also have exactly the same right and so does everyone else. And then we have no books left on the shelf for any of us.' --Katherine Paterson, Author\n\n    Write a persuasive essay to a newspaper reflecting your views on censorship in libraries. Do you believe that certain materials, such as books, music, movies, magazines, etc., should be removed from the shelves if they are found offensive? Support your position with convincing arguments from your own experience, observations, and/or reading.\n\n    Read for conciseness, clarity of thought, and form.\n"
+                        }
+                      ],
+                      "feedback_prompt": "(Optional) What aspects of this response stood out to you? What did it do well? How could it be improved?\n",
+                      "feedback_default_text": "I think that this response...\n",
+                      "title": "Open Response Assessment",
+                      "submission_start": "2001-01-01T00:00",
+                      "submission_due": "2029-01-01T00:00",
+                      "criteria": [
+                        {
+                          "label": "Ideas",
+                          "prompt": "Determine if there is a unifying theme or main idea.",
+                          "feedback": "optional",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Difficult for the reader to discern the main idea.  Too brief or too repetitive to establish or maintain a focus.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Good",
+                              "points": 5,
+                              "explanation": "Presents a unifying theme or main idea without going off on tangents.  Stays completely focused on topic and task.",
+                              "name": "Good",
+                              "order_num": 1
+                            }
+                          ],
+                          "name": "Ideas",
+                          "order_num": 0
+                        },
+                        {
+                          "label": "Content",
+                          "prompt": "Assess the content of the submission",
+                          "feedback": "disabled",
+                          "options": [
+                            {
+                              "label": "Poor",
+                              "points": 0,
+                              "explanation": "Includes little information with few or no details or unrelated details.  Unsuccessful in attempts to explore any facets of the topic.",
+                              "name": "Poor",
+                              "order_num": 0
+                            },
+                            {
+                              "label": "Good",
+                              "points": 3,
+                              "explanation": "Includes sufficient information and supporting details. (Details may not be fully developed; ideas may be listed.)  Explores some facets of the topic.",
+                              "name": "Good",
+                              "order_num": 1
+                            }
+                          ],
+                          "name": "Content",
+                          "order_num": 1
+                        }
+                      ],
+                      "assessments": [{ "required": true, "name": "staff-assessment" }],
+                      "editor_assessments_order": [
+                        "student-training",
+                        "peer-assessment",
+                        "self-assessment",
+                        "staff-assessment"
+                      ],
+                      "text_response": "required",
+                      "file_upload_response": "",
+                      "file_upload_type": null,
+                      "white_listed_file_types": "",
+                      "allow_latex": false,
+                      "leaderboard_show": 0
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
