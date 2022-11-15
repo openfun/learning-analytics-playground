@@ -73,6 +73,7 @@ Cypress.Commands.add("graylogPartialMatch", (partialEvent) => {
   const graylog = new Graylog(env);
   // EdX writes logs to graylog asynchronously.
   // Therefore we wait a bit to get the results.
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
   cy.wait(100);
   cy.request({
     method: "POST",
