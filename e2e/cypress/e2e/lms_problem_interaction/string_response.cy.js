@@ -1,30 +1,31 @@
-// LMS Option Response Problem Interaction Test
+// LMS String Response Problem Interaction Test
 
 import { getProblem, getSectionAndURL, getXblockId } from "../../support/utils";
 
-describe("LMS Option Response Problem Interaction Test", () => {
-  const [section, sectionUrl] = getSectionAndURL("optionresponse");
-  const problem = getProblem(section, "optionresponse");
+describe("LMS String Response Problem Interaction Test", () => {
+  const [section, sectionUrl] = getSectionAndURL("stringResponseHint");
+  const problem = getProblem(section, "stringResponseHint");
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
-    // Input wrong answer.
-    cy.get(`#input_${problemId}_2_1`).select("China");
+    // Input wrong answers.
+    cy.get(`#input_${problemId}_2_1`).clear().type("Not Nanjing University");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
     cy.get(`#status_${problemId}_2_1`).should("contain", "incorrect");
-    // Input correct answers.
-    cy.get(`#input_${problemId}_2_1`).select("India");
+    // Input correct answer.
+    cy.get(`#input_${problemId}_2_1`).clear().type("Nanjing University");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
     cy.get(`#status_${problemId}_2_1`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

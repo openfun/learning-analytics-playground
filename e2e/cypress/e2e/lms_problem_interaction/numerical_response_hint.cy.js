@@ -1,56 +1,46 @@
-// LMS Checkboxes Response With Hint Problem Interaction Test
+// LMS Numerical Response With Hint Problem Interaction Test
 
 import { getProblem, getSectionAndURL, getXblockId } from "../../support/utils";
 
-describe("LMS Checkboxes Response With Hint Problem Interaction Test", () => {
-  const [section, sectionUrl] = getSectionAndURL("checkboxesResponseHint");
-  const problem = getProblem(section, "checkboxesResponseHint");
+describe("LMS Numerical Response With Hint Problem Interaction Test", () => {
+  const [section, sectionUrl] = getSectionAndURL("numericalresponseHint");
+  const problem = getProblem(section, "numericalresponseHint");
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
-    // Ask for a first hint.
-    cy.get(".hint-button").click();
-    cy.get(".problem-hint").should("contain", "Indice (1 sur 2) :");
     // Input wrong answers.
-    cy.get(`#input_${problemId}_2_1_choice_0`).check();
-    cy.get(`#input_${problemId}_2_1_choice_1`).check();
-    cy.get(`#input_${problemId}_2_1_choice_2`).check();
-    cy.get(`#input_${problemId}_2_1_choice_3`).check();
+    cy.get(`#input_${problemId}_2_1`).clear().type("10000");
+    // Wait for front-end to process answers.
+    cy.get(`#input_${problemId}_2_1_preview`).should("contain", "10000");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
-    cy.get(`#status_${problemId}_2_1`).should("contain", "incorrect");
-    // Ask for a first hint (again).
+    cy.get(`#${problemId}_2_1_status`).should("contain", "incorrect");
+    // Ask for a first hint.
     cy.get(".hint-button").click();
     cy.get(".problem-hint").should("contain", "Indice (1 sur 2) :");
     // Ask for a second hint.
     cy.get(".hint-button").click();
     cy.get(".problem-hint").should("contain", "Indice (2 sur 2) :");
-    // Input correct answers.
-    cy.get(`#input_${problemId}_2_1_choice_0`).check();
-    cy.get(`#input_${problemId}_2_1_choice_1`).check();
-    cy.get(`#input_${problemId}_2_1_choice_2`).uncheck();
-    cy.get(`#input_${problemId}_2_1_choice_3`).check();
+    // Input correct answer.
+    cy.get(`#input_${problemId}_2_1`).clear().type("4");
+    // Wait for front-end to process answers.
+    cy.get(`#input_${problemId}_2_1_preview`).should("contain", "4");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
-    cy.get(`#status_${problemId}_2_1`).should("contain", "correct");
-    cy.lmsEnroll(false);
+    cy.get(`#${problemId}_2_1_status`).should("contain", "correct");
   });
 
   it("should log problem_check server event", () => {
     const context = { module: { usage_key: problem.locator } };
     cy.graylogPartialMatch({ context, event_type: "problem_check" });
-  });
-
-  it("should log feedback_displayed server event", () => {
-    const context = { module: { usage_key: problem.locator } };
-    const eventType = "edx.problem.hint.feedback_displayed";
-    cy.graylogPartialMatch({ context, event_type: eventType });
   });
 
   it("should log demandhint_displayed server event", () => {

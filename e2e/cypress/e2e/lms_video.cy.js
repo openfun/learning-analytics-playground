@@ -7,7 +7,11 @@ describe("LMS Video Events Test", () => {
   const videoAsset = getAssets().video;
 
   before(() => {
-    cy.lmsLoginAdmin();
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
+
     // Navigate to the courseware.
     // Triggers `video_player_ready` event.
     cy.visit(sectionUrl);
