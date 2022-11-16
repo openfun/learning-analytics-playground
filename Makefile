@@ -57,9 +57,14 @@ e2e/data/video.mp4:  ## generate a 5 second long video and put it in e2e/data di
 		-vcodec libx264 -preset superfast -tune zerolatency -pix_fmt yuv420p -t 5 \
 		-movflags +faststart "/e2e/data/video.mp4"
 
+edx/src:  ## directory to mount named bind volume for the edX-platform sources
+	mkdir -p edx/src
+
+edx/modules:  ## directory to mound named bind volume for the edX python modules
+	mkdir -p edx/modules
+
 # Make commands
 
-bootstrap: ## bootstrap the project
 bootstrap: \
 	migrate \
 	run \
@@ -79,6 +84,10 @@ clean-db: \
 clean-db:  ## remove LMS databases
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
 .PHONY: clean-db
+
+debug:  ## setup remote debugger
+	bin/setup_remote_debugger.sh
+.PHONY: debug
 
 # Fix open assessment file upload with filesystem backend.
 # `reverse_lazy` object cannot be dumped by `json.dumps`, which results in
@@ -160,6 +169,7 @@ down:  ## stop and remove docker containers
 	@echo "This will remove the containers and networks related to this project."
 	@echo -n "Are you sure to proceed? [y/N] " && read ans && [ $${ans:-N} = y ]
 	$(COMPOSE) down
+	rm -rf edx/src edx/modules
 .PHONY: down
 
 test: \
@@ -172,7 +182,9 @@ test: ## run tests
 tree: \
 	data/edx/media/.keep \
 	data/edx/store/.keep \
-	data/edx/openassessment_submissions
+	data/edx/openassessment_submissions \
+	edx/src \
+	edx/modules
 tree:  ## create data directories mounted as volumes
 .PHONY: tree
 
