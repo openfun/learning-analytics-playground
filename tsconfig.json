@@ -26,9 +26,7 @@
     "target": "es6"
   },
   "include": [
-    "e2e/cypress/integration",
-    "e2e/cypress/plugins",
-    "e2e/cypress/support",
+    "e2e"
   ],
   "exclude": ["node_modules"],
 }

@@ -47,6 +47,10 @@ data/edx/store/.keep:
 	mkdir -p data/edx/store
 	touch data/edx/store/.keep
 
+data/edx/openassessment_submissions:
+	mkdir -p data/edx/openassessment_submissions
+	touch data/edx/openassessment_submissions/.keep
+
 e2e/data/video.mp4:  ## generate a 5 second long video and put it in e2e/data directory
 	mkdir -p e2e/data
 	$(COMPOSE_RUN) ffmpeg -y -f lavfi -i testsrc=size=1920x1080:rate=1 -vf hue=s=0 \
@@ -59,7 +63,8 @@ bootstrap: ## bootstrap the project
 bootstrap: \
 	migrate \
 	run \
-	realm
+	realm \
+	fix-openassessment-fileupload
 .PHONY: bootstrap
 
 clean: \
@@ -74,6 +79,14 @@ clean-db: \
 clean-db:  ## remove LMS databases
 	$(COMPOSE) rm edx_mongodb edx_mysql edx_redis keycloak_postgres
 .PHONY: clean-db
+
+# Fix open assessment file upload with filesystem backend.
+# `reverse_lazy` object cannot be dumped by `json.dumps`, which results in
+# TypeError when attempting to convert the xblock response to json.
+# https://github.com/openedx/edx-ora2/commit/7b57c910a6438572ee3e2aa7557cd5c8f51be887
+fix-openassessment-fileupload:  ## fix open assessment file upload bug
+	$(COMPOSE) exec -uroot edx_lms sed -i "s/reverse_lazy/reverse/g"  /usr/local/src/ora2/openassessment/fileupload/backends/filesystem.py
+.PHONY: fix-openassessment-fileupload
 
 install: ## install tests dependencies
 	$(YARN) install
@@ -153,12 +166,13 @@ test: \
 	e2e/data/video.mp4 \
 	remove-edx-courses
 test: ## run tests
-	$(COMPOSE_RUN) cypress run --config-file false
+	$(COMPOSE_RUN) cypress run --config video=false
 .PHONY: test
 
 tree: \
 	data/edx/media/.keep \
-	data/edx/store/.keep
+	data/edx/store/.keep \
+	data/edx/openassessment_submissions
 tree:  ## create data directories mounted as volumes
 .PHONY: tree
 

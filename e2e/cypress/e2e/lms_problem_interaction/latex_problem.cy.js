@@ -8,8 +8,10 @@ describe("LMS LaTeX Problem Interaction Test", () => {
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input answers.
@@ -45,7 +47,6 @@ describe("LMS LaTeX Problem Interaction Test", () => {
     cy.get(`#status_${problemId}_8_1`).should("contain", "correct");
     cy.get(`#status_${problemId}_8_2`).should("contain", "correct");
     cy.get(`#status_${problemId}_9_1`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

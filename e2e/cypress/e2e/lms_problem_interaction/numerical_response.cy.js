@@ -1,29 +1,30 @@
-// LMS Formula Response Problem Interaction Test
+// LMS Numerical Response Problem Interaction Test
 
 import { getProblem, getSectionAndURL, getXblockId } from "../../support/utils";
 
-describe("LMS Formula Response Problem Interaction Test", () => {
-  const [section, sectionUrl] = getSectionAndURL("formularesponse");
-  const problem = getProblem(section, "formularesponse");
+describe("LMS Numerical Response Problem Interaction Test", () => {
+  const [section, sectionUrl] = getSectionAndURL("numericalresponse");
+  const problem = getProblem(section, "numericalresponse");
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input answers.
-    cy.get(`#input_${problemId}_2_1`).clear().type("(R_1*R_2)/R_3");
-    cy.get(`#input_${problemId}_3_1`).clear().type("n*x^(n-1)");
+    cy.get(`#input_${problemId}_2_1`).clear().type("10000");
+    cy.get(`#input_${problemId}_3_1`).clear().type("10*i");
     // Wait for front-end to process answers.
-    cy.get(`#input_${problemId}_2_1_preview`).should("contain", "3");
-    cy.get(`#input_${problemId}_3_1_preview`).should("contain", "1");
+    cy.get(`#input_${problemId}_2_1_preview`).should("contain", "10000");
+    cy.get(`#input_${problemId}_3_1_preview`).should("contain", "10⋅i");
     // Submit answer.
     cy.get(".check.Valider").click();
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
-    cy.get(`#${problemId}_2_1_status`).should("contain", "correct");
+    cy.get(`#${problemId}_2_1_status`).should("contain", "incorrect");
     cy.get(`#${problemId}_3_1_status`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

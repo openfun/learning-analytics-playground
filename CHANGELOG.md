@@ -19,6 +19,8 @@ and this project adheres to
 - Add edX enrollment event tests
 - Add edX problem_check event tests
 - Add edX video event tests
+- Add edX user generator
+- Add edX open response assessment tests
 
 
 [Unreleased]: https://github.com/openfun/learning-analytics-playground/commits/main

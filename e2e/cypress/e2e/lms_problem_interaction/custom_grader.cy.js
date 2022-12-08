@@ -8,8 +8,10 @@ describe("LMS Custom Grader Problem Interaction Test", () => {
   const problemId = getXblockId(problem);
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input wrong answers.
@@ -36,7 +38,6 @@ describe("LMS Custom Grader Problem Interaction Test", () => {
     cy.get(`#status_${problemId}_2_2`).should("contain", "correct");
     cy.get(`#status_${problemId}_3_1`).should("contain", "correct");
     cy.get(`#status_${problemId}_3_2`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

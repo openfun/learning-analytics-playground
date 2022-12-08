@@ -21,8 +21,19 @@ describe("LMS Drag And Drop Problem Interaction Test", () => {
   };
 
   before(() => {
-    cy.lmsLoginStudent();
-    cy.lmsEnroll(true);
+    cy.lmsCreateUser().then(({ email, password }) => {
+      cy.lmsLogin(email, password);
+      cy.lmsEnroll(true);
+    });
+    // Reset Problem
+    const { courseId } = Cypress.env("EDX_COURSES").demoCourse1;
+    const handlerURL = "handler/xmodule_handler/problem_reset";
+    const url = `/courses/${courseId}/xblock/${problem.locator}/${handlerURL}`;
+    const method = "POST";
+    const body = { id: problem.locator };
+    cy.request({ url, method, body }).then((response) => {
+      expect(response.status).to.equal(200);
+    });
     // Navigate to the courseware.
     cy.visit(sectionUrl);
     // Input answers (first image).
@@ -47,7 +58,6 @@ describe("LMS Drag And Drop Problem Interaction Test", () => {
     cy.get(".check.Valider").should("not.have.class", "is-disabled");
     cy.get(`#status_${problemId}_2_1`).should("contain", "correct");
     cy.get(`#status_${problemId}_3_1`).should("contain", "correct");
-    cy.lmsEnroll(false);
   });
 
   it("should log problem_check server event", () => {

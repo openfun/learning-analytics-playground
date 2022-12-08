@@ -112,6 +112,9 @@ class HttpWrapper {
 
 // From https://stackoverflow.com/a/61676007
 const isSubset = (superObj, subObj) => {
+  if (subObj === null) {
+    return subObj === superObj;
+  }
   return Object.keys(subObj).every((ele) => {
     if (typeof subObj[ele] === "object" && typeof superObj[ele] === "object") {
       return isSubset(superObj[ele], subObj[ele]);
@@ -129,6 +132,10 @@ const getProblem = (section, problemName, unitName = null) => {
   return section.vertical[unitName].problem[problemName];
 };
 
+const getXblockId = (xBlock) => {
+  return xBlock.locator.slice(-32);
+};
+
 const getSectionAndURL = (
   sectionName,
   chapterName = "demoChapter1",
@@ -144,9 +151,15 @@ const getSectionAndURL = (
   return [section, sectionUrl];
 };
 
-const getXblockId = (xBlock) => {
-  return xBlock.locator.slice(-32);
-};
+function uuid4() {
+  const buffer = crypto.getRandomValues(new Uint8Array(16));
+  buffer[6] = (buffer[6] & 0x0f) | 0x40;
+  buffer[8] = (buffer[8] & 0x3f) | 0x80;
+  let i = 0;
+  return "xxxx-xx-xx-xx-xxxxxx".replace(/[x]/g, () =>
+    buffer[i++].toString(16).padStart(2, 0)
+  );
+}
 
 module.exports.HttpWrapper = HttpWrapper;
 module.exports.isSubset = isSubset;
@@ -154,3 +167,4 @@ module.exports.getAssets = getAssets;
 module.exports.getSectionAndURL = getSectionAndURL;
 module.exports.getProblem = getProblem;
 module.exports.getXblockId = getXblockId;
+module.exports.uuid4 = uuid4;
