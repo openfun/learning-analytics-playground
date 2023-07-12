@@ -25,7 +25,7 @@ jobs:
   # Check that the git history is clean and complies with our expectations
   lint-git:
     docker:
-      - image: circleci/python:3.9-buster
+      - image: cimg/python:3.11
         auth:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD
@@ -48,7 +48,7 @@ jobs:
   # Check that the CHANGELOG has been updated in the current branch
   check-changelog:
     docker:
-      - image: circleci/buildpack-deps:buster-scm
+      - image: cimg/base:current
         auth:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD
@@ -63,7 +63,7 @@ jobs:
   # Check that the CHANGELOG max line length does not exceed 80 characters
   lint-changelog:
     docker:
-      - image: debian:buster-slim
+      - image: debian:stretch
         auth:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD
@@ -94,7 +94,7 @@ jobs:
 
   lint-test:
     docker:
-      - image: circleci/node:14
+      - image: cimg/node:14.0.0
         auth:
           username: $DOCKER_HUB_USER
           password: $DOCKER_HUB_PASSWORD
