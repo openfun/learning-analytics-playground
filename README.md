@@ -27,10 +27,10 @@ make run-edx
 
 3. Two users are available for testing the LMS/CMS:
 
-| Role    | Email             | Password |
-| ------- | ----------------- | -------- |
+| Role    | Email            | Password |
+| ------- | ---------------- | -------- |
 | admin   | admin@example.com | admin    |
-| student | edx@exampler.com  | edx      |
+| student | edx@example.com  | edx      |
 
 > Note that it is also possible to create customized users at your convenience,
 > but remember that those accounts will not persist if you remove the database container.
