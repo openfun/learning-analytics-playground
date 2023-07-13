@@ -11,7 +11,7 @@ services:
       - ./e2e:/e2e
 
   node:
-    image: circleci/node:14
+    image: cimg/node:14.0.0
     working_dir: /app
     user: ${DOCKER_UID}:${DOCKER_GID}
     volumes:
