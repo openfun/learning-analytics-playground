@@ -103,6 +103,16 @@ make realm
 You can now login to grafana using the following credentials:
 `grafana:funfunfun`.
 
+The `ralph` client has been configured with the specific audience `http://localhost:8100` but it can be changed through the Keycloak interface.
+Two users have been created for this client:
+- `ralph_admin:funfunfun` with the scope `all`
+- `ralph_learner:moocmooc` with the scope `statements/read/mine`
+
+To get an access token, you can use the following command:
+```
+curl -X POST -d "grant_type=password" -d "client_id=ralph" -d "client_secret=bcef3562-730d-4575-9e39-63e185f99bca" -d "username=ralph_admin" -d "password=funfunfun" http://localhost:8080/auth/realms/fun-mooc/protocol/openid-connect/token
+```
+
 ## License
 
 This work is released under the MIT license (see [LICENSE](./LICENSE)).
