@@ -6,12 +6,18 @@ set -eo pipefail
 export PATH="/opt/jboss/keycloak/bin/:${PATH}"
 
 declare realm="${DEFAULT_REALM_NAME}"
-declare user="${TEST_USER_NAME}"
-declare password="${TEST_USER_PASSWORD}"
-declare email="${TEST_USER_EMAIL}"
+declare potsie_user="${POTSIE_TEST_USER_NAME}"
+declare potsie_password="${POTSIE_TEST_USER_PASSWORD}"
+declare potsie_email="${POTSIE_TEST_USER_EMAIL}"
 declare client_id="${GRAFANA_CLIENT_ID}"
 declare client_uuid
 declare client_secret="${GRAFANA_CLIENT_SECRET}"
+declare ralph_admin_user="${RALPH_ADMIN_USER_NAME}"
+declare ralph_admin_password="${RALPH_ADMIN_USER_PASSWORD}"
+declare ralph_admin_email="${RALPH_ADMIN_USER_EMAIL}"
+declare ralph_learner_user="${RALPH_LEARNER_USER_NAME}"
+declare ralph_learner_password="${RALPH_LEARNER_USER_PASSWORD}"
+declare ralph_learner_email="${RALPH_LEARNER_USER_EMAIL}"
 
 # Server login
 kcadm.sh config credentials \
@@ -28,7 +34,7 @@ fi
 # And (re-)create it
 kcadm.sh create realms -s realm="${realm}" -s enabled=true
 
-# Create a client along with its roles
+# Create a potsie client along with its roles
 echo "Will create potsie client..."
 kcadm.sh create clients -r "${realm}" -f - < /tmp/config/clients/potsie.json
 client_uuid=$(kcadm.sh get clients -r fun-mooc --fields id -q clientId=potsie --format csv | sed 's/"//g')
@@ -37,7 +43,41 @@ kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=editor
 kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=viewer
 
 # Create a new user
-kcadm.sh create users -r "${realm}" -s username="${user}" -s email="${email}" -s enabled=true
-kcadm.sh set-password -r "${realm}" --username "${user}" --new-password "${password}"
+kcadm.sh create users -r "${realm}" -s username="${potsie_user}" -s email="${potsie_email}" -s enabled=true
+kcadm.sh set-password -r "${realm}" --username "${potsie_user}" --new-password "${potsie_password}"
 # Add role for potsie client
-kcadm.sh add-roles -r "${realm}" --uusername "${user}" --cclientid "potsie" --rolename "viewer"
+kcadm.sh add-roles -r "${realm}" --uusername "${potsie_user}" --cclientid "potsie" --rolename "viewer"
+
+
+# Create a ralph client along with its roles
+echo "Will create ralph client..."
+kcadm.sh create clients -r "${realm}" -f - < /tmp/config/clients/ralph.json
+client_uuid=$(kcadm.sh get clients -r fun-mooc --fields id -q clientId=ralph --format csv | sed 's/"//g')
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=all
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=all/read
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=state
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=statements/read
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=statements/read/mine
+kcadm.sh create "clients/${client_uuid}/roles" -r "${realm}" -s name=statements/write
+
+# Create an audience for this specific client
+kcadm.sh create "clients/${client_uuid}/protocol-mappers/models" -r "${realm}" \
+  -s name=audience-mapping \
+  -s protocol=openid-connect \
+  -s protocolMapper=oidc-audience-mapper \
+  -s 'config."included.custom.audience"=http://localhost:8100' \
+  -s 'config."access.token.claim"=true' \
+  -s 'config."id.token.claim"=false'
+
+
+# Create an admin user
+kcadm.sh create users -r "${realm}" -s username="${ralph_admin_user}" -s email="${ralph_admin_email}" -s enabled=true
+kcadm.sh set-password -r "${realm}" --username "${ralph_admin_user}" --new-password "${ralph_admin_password}"
+# Add role for ralph user
+kcadm.sh add-roles -r "${realm}" --uusername "${ralph_admin_user}" --cclientid "ralph" --rolename "all"
+
+# Create a user that can only read its statements
+kcadm.sh create users -r "${realm}" -s username="${ralph_learner_user}" -s email="${ralph_learner_email}" -s enabled=true
+kcadm.sh set-password -r "${realm}" --username "${ralph_learner_user}" --new-password "${ralph_learner_password}"
+# Add role for ralph user
+kcadm.sh add-roles -r "${realm}" --uusername "${ralph_learner_user}" --cclientid "ralph" --rolename "statements/read/mine"
