@@ -57,6 +57,7 @@ e2e/data/video.mp4:  ## generate a 5 second long video and put it in e2e/data di
 
 bootstrap: ## bootstrap the project
 bootstrap: \
+	network \
 	migrate \
 	run \
 	realm
@@ -108,6 +109,12 @@ migrate:  ## perform database migrations
 	$(COMPOSE_RUN) edx_lms python /usr/local/bin/auth_init
 	$(COMPOSE_RUN) edx_cms python manage.py cms migrate
 .PHONY: migrate
+
+network: ## create external networks
+	@echo "Creating external networks..."
+	docker network inspect potsie >/dev/null 2>&1 || docker network create potsie
+	docker network inspect ralph >/dev/null 2>&1 || docker network create ralph
+.PHONY: networks
 
 run: \
   tree
