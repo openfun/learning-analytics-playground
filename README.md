@@ -85,10 +85,20 @@ started with the project's `make run`, it can be accessed at
 [http://localhost:8080](http://localhost:8080). Administrator credentials are:
 `admin:pass`.
 
-For now only the `potsie` client has been configured to login to grafana (see
+The `potsie` client has been configured to login to grafana (see
 the [openfun/potsie](https://github.com/openfun/potsie) project) using a
 Keycloak account (it should have been created by the `make bootstrap` command).
 You can login to grafana using the following credentials: `grafana:funfunfun`.
+
+The `ralph` client has been configured with the specific audience `http://localhost:8100` but it can be changed through the Keycloak interface.
+Two users have been created for this client:
+- `ralph_admin:funfunfun` with the scope `all`
+- `ralph_learner:moocmooc` with the scope `statements/read/mine`
+
+To get an access token, you can use the following command:
+```
+curl -X POST -d "grant_type=password" -d "client_id=ralph" -d "client_secret=bcef3562-730d-4575-9e39-63e185f99bca" -d "username=ralph_admin" -d "password=funfunfun" http://localhost:8080/auth/realms/fun-mooc/protocol/openid-connect/token
+```
 
 ## License
 
