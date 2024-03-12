@@ -109,14 +109,27 @@ migrate:  ## perform database migrations
 	$(COMPOSE_RUN) edx_cms python manage.py cms migrate
 .PHONY: migrate
 
+run: ## start graylog/keycloak services
 run: \
-  tree
-run:  ## start base services
-	$(COMPOSE) up -d graylog keycloak
-	@echo "Wait for service to be up..."
-	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
-	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
+	run-keycloak \
+	run-graylog
 .PHONY: run
+
+run-graylog: \
+  tree
+run-graylog:  ## start graylog service
+	$(COMPOSE) up -d graylog
+	@echo "Wait for graylog to be up..."
+	$(COMPOSE_RUN) dockerize -wait tcp://graylog:9000 -timeout 60s
+.PHONY: run-graylog
+
+run-keycloak: \
+  tree
+run-keycloak:  ## start keycloak service
+	$(COMPOSE) up -d keycloak
+	@echo "Wait for keycloak to be up..."
+	$(COMPOSE_RUN) dockerize -wait tcp://keycloak:8080 -timeout 60s
+.PHONY: run-keycloak
 
 run-edx: \
   tree
