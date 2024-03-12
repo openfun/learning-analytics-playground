@@ -84,7 +84,7 @@ jobs:
       - checkout
       - run:
           name: Create external potsie network
-          command: docker network create potsie
+          command: docker network create potsie_default
       - run:
           name: Bootstrap project
           command: make bootstrap
