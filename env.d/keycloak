@@ -14,10 +14,19 @@ DB_PASSWORD=password
 KEYCLOAK_USER=admin
 KEYCLOAK_PASSWORD=pass
 
-# Potsie
 DEFAULT_REALM_NAME=fun-mooc
-TEST_USER_NAME=grafana
-TEST_USER_PASSWORD=funfunfun
-TEST_USER_EMAIL=grafana@example.org
+
+# Potsie
+POTSIE_TEST_USER_NAME=grafana
+POTSIE_TEST_USER_PASSWORD=funfunfun
+POTSIE_TEST_USER_EMAIL=grafana@example.org
 GRAFANA_CLIENT_ID=potsie
 GRAFANA_CLIENT_SECRET=fa9e98ee-61a1-4092-8dac-1597da0c1bb0
+
+# Ralph
+RALPH_ADMIN_USER_NAME=ralph_admin
+RALPH_ADMIN_USER_PASSWORD=funfunfun
+RALPH_ADMIN_USER_EMAIL=ralph_admin@example.org
+RALPH_LEARNER_USER_NAME=ralph_learner
+RALPH_LEARNER_USER_PASSWORD=moocmooc
+RALPH_LEARNER_USER_EMAIL=ralph_learner@example.org

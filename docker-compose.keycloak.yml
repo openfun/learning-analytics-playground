@@ -15,6 +15,9 @@ services:
       potsie_default:
         aliases:
           - keycloak
+      ralph:
+        aliases:
+          - keycloak
       default:
 
   keycloak_postgres:
@@ -25,4 +28,6 @@ services:
 
 networks:
   potsie_default:
+    external: true
+  ralph:
     external: true
